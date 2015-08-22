@@ -1,0 +1,472 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		002A3DA51B795761006C478D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DA41B795761006C478D /* AppDelegate.swift */; };
+		002A3DA71B795761006C478D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DA61B795761006C478D /* FirstViewController.swift */; };
+		002A3DA91B795761006C478D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DA81B795761006C478D /* SecondViewController.swift */; };
+		002A3DAC1B795761006C478D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 002A3DAA1B795761006C478D /* Main.storyboard */; };
+		002A3DAE1B795761006C478D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002A3DAD1B795761006C478D /* Images.xcassets */; };
+		002A3DB11B795761006C478D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 002A3DAF1B795761006C478D /* LaunchScreen.xib */; };
+		002A3DBD1B795761006C478D /* SpotiroomsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DBC1B795761006C478D /* SpotiroomsTests.swift */; };
+		002A3DC81B795CB7006C478D /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DC71B795CB7006C478D /* Spotify.framework */; };
+		002A3DCA1B795D7D006C478D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DC91B795D7D006C478D /* AVFoundation.framework */; };
+		002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */; };
+		002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DCD1B79637B006C478D /* LoginVC.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		002A3DB71B795761006C478D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 002A3D971B795761006C478D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 002A3D9E1B795761006C478D;
+			remoteInfo = Spotirooms;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		002A3D9F1B795761006C478D /* Spotirooms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotirooms.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		002A3DA31B795761006C478D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		002A3DA41B795761006C478D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		002A3DA61B795761006C478D /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		002A3DA81B795761006C478D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		002A3DAB1B795761006C478D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		002A3DAD1B795761006C478D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		002A3DB01B795761006C478D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		002A3DB61B795761006C478D /* SpotiroomsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotiroomsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		002A3DBB1B795761006C478D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		002A3DBC1B795761006C478D /* SpotiroomsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotiroomsTests.swift; sourceTree = "<group>"; };
+		002A3DC71B795CB7006C478D /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Spotify.framework; path = Frameworks/Spotify.framework; sourceTree = "<group>"; };
+		002A3DC91B795D7D006C478D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		002A3DCD1B79637B006C478D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		002A3DD01B796518006C478D /* Spotirooms-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Spotirooms-Bridging-Header.h"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		002A3D9C1B795761006C478D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */,
+				002A3DCA1B795D7D006C478D /* AVFoundation.framework in Frameworks */,
+				002A3DC81B795CB7006C478D /* Spotify.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		002A3DB31B795761006C478D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		002A3D961B795761006C478D = {
+			isa = PBXGroup;
+			children = (
+				002A3DA11B795761006C478D /* Spotirooms */,
+				002A3DB91B795761006C478D /* SpotiroomsTests */,
+				002A3DA01B795761006C478D /* Products */,
+				002A3DC61B795C78006C478D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		002A3DA01B795761006C478D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				002A3D9F1B795761006C478D /* Spotirooms.app */,
+				002A3DB61B795761006C478D /* SpotiroomsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		002A3DA11B795761006C478D /* Spotirooms */ = {
+			isa = PBXGroup;
+			children = (
+				002A3DA41B795761006C478D /* AppDelegate.swift */,
+				002A3DCD1B79637B006C478D /* LoginVC.swift */,
+				002A3DAA1B795761006C478D /* Main.storyboard */,
+				002A3DA61B795761006C478D /* FirstViewController.swift */,
+				002A3DA81B795761006C478D /* SecondViewController.swift */,
+				002A3DAD1B795761006C478D /* Images.xcassets */,
+				002A3DAF1B795761006C478D /* LaunchScreen.xib */,
+				002A3DA21B795761006C478D /* Supporting Files */,
+				002A3DD01B796518006C478D /* Spotirooms-Bridging-Header.h */,
+			);
+			path = Spotirooms;
+			sourceTree = "<group>";
+		};
+		002A3DA21B795761006C478D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				002A3DA31B795761006C478D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		002A3DB91B795761006C478D /* SpotiroomsTests */ = {
+			isa = PBXGroup;
+			children = (
+				002A3DBC1B795761006C478D /* SpotiroomsTests.swift */,
+				002A3DBA1B795761006C478D /* Supporting Files */,
+			);
+			path = SpotiroomsTests;
+			sourceTree = "<group>";
+		};
+		002A3DBA1B795761006C478D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				002A3DBB1B795761006C478D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		002A3DC61B795C78006C478D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */,
+				002A3DC91B795D7D006C478D /* AVFoundation.framework */,
+				002A3DC71B795CB7006C478D /* Spotify.framework */,
+			);
+			name = Frameworks;
+			path = Spotirooms;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		002A3D9E1B795761006C478D /* Spotirooms */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 002A3DC01B795761006C478D /* Build configuration list for PBXNativeTarget "Spotirooms" */;
+			buildPhases = (
+				002A3D9B1B795761006C478D /* Sources */,
+				002A3D9C1B795761006C478D /* Frameworks */,
+				002A3D9D1B795761006C478D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Spotirooms;
+			productName = Spotirooms;
+			productReference = 002A3D9F1B795761006C478D /* Spotirooms.app */;
+			productType = "com.apple.product-type.application";
+		};
+		002A3DB51B795761006C478D /* SpotiroomsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 002A3DC31B795761006C478D /* Build configuration list for PBXNativeTarget "SpotiroomsTests" */;
+			buildPhases = (
+				002A3DB21B795761006C478D /* Sources */,
+				002A3DB31B795761006C478D /* Frameworks */,
+				002A3DB41B795761006C478D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				002A3DB81B795761006C478D /* PBXTargetDependency */,
+			);
+			name = SpotiroomsTests;
+			productName = SpotiroomsTests;
+			productReference = 002A3DB61B795761006C478D /* SpotiroomsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		002A3D971B795761006C478D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Myles Ringle";
+				TargetAttributes = {
+					002A3D9E1B795761006C478D = {
+						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 923CWAH3CT;
+					};
+					002A3DB51B795761006C478D = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = 002A3D9E1B795761006C478D;
+					};
+				};
+			};
+			buildConfigurationList = 002A3D9A1B795761006C478D /* Build configuration list for PBXProject "Spotirooms" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 002A3D961B795761006C478D;
+			productRefGroup = 002A3DA01B795761006C478D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				002A3D9E1B795761006C478D /* Spotirooms */,
+				002A3DB51B795761006C478D /* SpotiroomsTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		002A3D9D1B795761006C478D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002A3DAC1B795761006C478D /* Main.storyboard in Resources */,
+				002A3DB11B795761006C478D /* LaunchScreen.xib in Resources */,
+				002A3DAE1B795761006C478D /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		002A3DB41B795761006C478D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		002A3D9B1B795761006C478D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002A3DA91B795761006C478D /* SecondViewController.swift in Sources */,
+				002A3DA51B795761006C478D /* AppDelegate.swift in Sources */,
+				002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */,
+				002A3DA71B795761006C478D /* FirstViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		002A3DB21B795761006C478D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002A3DBD1B795761006C478D /* SpotiroomsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		002A3DB81B795761006C478D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 002A3D9E1B795761006C478D /* Spotirooms */;
+			targetProxy = 002A3DB71B795761006C478D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		002A3DAA1B795761006C478D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				002A3DAB1B795761006C478D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		002A3DAF1B795761006C478D /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				002A3DB01B795761006C478D /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		002A3DBE1B795761006C478D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		002A3DBF1B795761006C478D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		002A3DC11B795761006C478D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Spotirooms/Frameworks",
+				);
+				INFOPLIST_FILE = Spotirooms/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Spotirooms/Spotirooms-Bridging-Header.h";
+			};
+			name = Debug;
+		};
+		002A3DC21B795761006C478D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Spotirooms/Frameworks",
+				);
+				INFOPLIST_FILE = Spotirooms/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Spotirooms/Spotirooms-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		002A3DC41B795761006C478D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SpotiroomsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Spotirooms.app/Spotirooms";
+			};
+			name = Debug;
+		};
+		002A3DC51B795761006C478D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = SpotiroomsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Spotirooms.app/Spotirooms";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		002A3D9A1B795761006C478D /* Build configuration list for PBXProject "Spotirooms" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				002A3DBE1B795761006C478D /* Debug */,
+				002A3DBF1B795761006C478D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		002A3DC01B795761006C478D /* Build configuration list for PBXNativeTarget "Spotirooms" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				002A3DC11B795761006C478D /* Debug */,
+				002A3DC21B795761006C478D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		002A3DC31B795761006C478D /* Build configuration list for PBXNativeTarget "SpotiroomsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				002A3DC41B795761006C478D /* Debug */,
+				002A3DC51B795761006C478D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 002A3D971B795761006C478D /* Project object */;
+}
