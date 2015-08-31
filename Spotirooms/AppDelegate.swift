@@ -7,12 +7,11 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    let clientID = "704562d42a754b50a52a77c754d13ad6"
-    let callbackURL = "spotirooms://callback"
     
     var window: UIWindow?
 
@@ -21,16 +20,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         var auth: SPTAuth = SPTAuth.defaultInstance()
-        auth.clientID = clientID
-        auth.requestedScopes = [SPTAuthStreamingScope]
-        auth.redirectURL = NSURL(string: callbackURL)
+        auth.clientID = Constants.clientID
+        auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserReadPrivateScope]
+        auth.redirectURL = NSURL(string: Constants.callbackURL)
+
+        // Check for valid session token
+        // ************** NEED TO CHECK SPOTIFY SESSION HERE AS WELL
+        if (NSUserDefaults.standardUserDefaults().stringForKey("session_token") != nil) && (auth.session != nil) {
+            if auth.session.isValid() {
+                Alamofire.request(.POST, "\(Constants.serverURL)/api/session_check", encoding: .JSON)
+                    .authenticate(user: NSUserDefaults.standardUserDefaults().stringForKey("session_token")!, password: "")
+                    .responseJSON {(request, response, json, error) in
+                        if(error == nil) {
+                            var json = JSON(json!)
+                            // Server Error
+                            if json["success"].string != nil {
+                                let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                                var homeViewController = mainStoryboard.instantiateViewControllerWithIdentifier("RoomListVC") as!
+                                RoomListVC
+                                self.window!.rootViewController = homeViewController
+                            }
+                        }
+                }
+            }
+        }
         
         return true
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        var auth: SPTAuth = SPTAuth.defaultInstance()
+        /*var auth: SPTAuth = SPTAuth.defaultInstance()
     
         let authCallback = { (error: NSError!, session: SPTSession!) -> Void in
             // Callback will be triggered when auth completes
@@ -47,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if auth.canHandleURL(url) {
             auth.handleAuthCallbackWithTriggeredAuthURL(url, callback: authCallback)
             return true
-        }
+        }*/
         
         return false
         
