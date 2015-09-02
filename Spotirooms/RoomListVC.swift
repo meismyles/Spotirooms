@@ -25,6 +25,7 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var rooms: Array<JSON>! = []
     var selectedRoom_info: JSON!
+    var noRoomsToShow: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,15 +36,14 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         // Remove back button title in future pushed views
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Done, target:nil, action:nil)
-        
-        self.loadRoomList()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         if let selectedIndexPath: NSIndexPath = self.tableView.indexPathForSelectedRow() {
-            self.tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+            var cell = tableView.cellForRowAtIndexPath(selectedIndexPath)
+            cell!.contentView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
         }
         
         // Show activity indicator
@@ -52,6 +52,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         self.myActivityIndicatorView.indicatorColor = UIColor.whiteColor()
         self.myActivityIndicatorView.indicatorStyle = "spotify"
         self.myActivityIndicatorView.startActivity()
+        
+        self.loadRoomList()
     }
 
     func hideLoadingView() {
@@ -88,15 +90,14 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                     var json = JSON(json!)
                     // Server Error
                     if let error = json["error"].string {
-                        var alert = UIAlertController(title: "Error", message: error, preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        self.noRoomsToShow = true
                     }
                     else {
+                        self.noRoomsToShow = false
                         self.rooms = json["results"].arrayValue
-                        self.refreshControl.endRefreshing()
-                        self.tableView.reloadData()
                     }
+                    self.refreshControl.endRefreshing()
+                    self.tableView.reloadData()
                 }
         }
     }
@@ -125,11 +126,12 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.rooms.count
+        let count = self.noRoomsToShow ? 1 : self.rooms.count
+        return count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 38
+        return 50
     }
     
     /*func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
@@ -151,16 +153,22 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
         }
         
-        let room_info = self.rooms[indexPath.row]
-        cell!.textLabel?.text = room_info["name"].string
-        cell!.detailTextLabel?.text = String(room_info["active_users"].intValue)
+        if self.noRoomsToShow == false {
+            let room_info = self.rooms[indexPath.row]
+            cell!.textLabel?.text = room_info["name"].string
+            cell!.detailTextLabel?.text = String(room_info["active_users"].intValue) + " Users"
+        }
+        else {
+            cell!.textLabel?.text = "Oh noes! There's no rooms!"
+            cell!.detailTextLabel?.text = "Why not create one?"
+        }
         
-        /*cell?.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        cell!.textLabel?.font = UIFont(name: "Menlo-Regular", size: 13)
-        cell!.textLabel?.textColor = UIColor.blackColor()
-        cell!.detailTextLabel?.font = UIFont(name: "Menlo-Regular", size: 12)
-        cell!.detailTextLabel?.textColor = UIColor.darkGrayColor()
-        cell!.selectionStyle = UITableViewCellSelectionStyle.Default*/
+        cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        cell!.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 16)
+        cell!.textLabel?.textColor = UIColor.whiteColor()
+        cell!.detailTextLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 13)
+        cell!.detailTextLabel?.textColor = UIColor.lightGrayColor()
+        cell!.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell!
     }
@@ -170,15 +178,13 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var cell = tableView.cellForRowAtIndexPath(indexPath)
         
-        self.selectedRoom_info = self.rooms[indexPath.row]
-        self.performSegueWithIdentifier("roomSegue", sender: nil)
+        if self.noRoomsToShow == false {
+            cell!.contentView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.05)
+            
+            self.selectedRoom_info = self.rooms[indexPath.row]
+            self.performSegueWithIdentifier("roomSegue", sender: nil)
+        }
     }
-    
-    /*func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        var cell = tableView.cellForRowAtIndexPath(indexPath)
-
-    }*/
-
 
 
 }

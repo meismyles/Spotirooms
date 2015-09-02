@@ -19,6 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        UINavigationBar.appearance().barStyle = UIBarStyle.Black
+        UITabBar.appearance().tintColor = UIColor.whiteColor()
+        
         var auth: SPTAuth = SPTAuth.defaultInstance()
         auth.clientID = Constants.clientID
         auth.requestedScopes = [SPTAuthStreamingScope, SPTAuthUserReadPrivateScope]
@@ -26,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Check for valid session token
         // ************** NEED TO CHECK SPOTIFY SESSION HERE AS WELL
-        if (NSUserDefaults.standardUserDefaults().stringForKey("session_token") != nil) && (auth.session != nil) {
+        /*if (NSUserDefaults.standardUserDefaults().stringForKey("session_token") != nil) && (auth.session != nil) {
             if auth.session.isValid() {
                 Alamofire.request(.POST, "\(Constants.serverURL)/api/session_check", encoding: .JSON)
                     .authenticate(user: NSUserDefaults.standardUserDefaults().stringForKey("session_token")!, password: "")
@@ -43,14 +46,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                 }
             }
-        }
+        }*/
         
         return true
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        /*var auth: SPTAuth = SPTAuth.defaultInstance()
+        var auth: SPTAuth = SPTAuth.defaultInstance()
     
         let authCallback = { (error: NSError!, session: SPTSession!) -> Void in
             // Callback will be triggered when auth completes
@@ -67,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if auth.canHandleURL(url) {
             auth.handleAuthCallbackWithTriggeredAuthURL(url, callback: authCallback)
             return true
-        }*/
+        }
         
         return false
         
