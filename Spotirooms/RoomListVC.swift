@@ -14,6 +14,7 @@ import DTIActivityIndicator
 class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let userDefaults = NSUserDefaults.standardUserDefaults()
+    var tabBarC: TabBarC!
     
     @IBOutlet weak var newRoom_button: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
@@ -24,11 +25,14 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var popover: UIPopoverController? = nil
     
     var rooms: Array<JSON>! = []
-    var selectedRoom_info: JSON!
+    var selectedRoom_info: JSON?
     var noRoomsToShow: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        
         // Do any additional setup after loading the view, typically from a nib.
         self.refreshControl = UIRefreshControl()
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
@@ -41,11 +45,6 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let selectedIndexPath: NSIndexPath = self.tableView.indexPathForSelectedRow() {
-            var cell = tableView.cellForRowAtIndexPath(selectedIndexPath)
-            cell!.contentView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
-        }
-        
         // Show activity indicator
         self.myActivityIndicatorView = DTIActivityIndicatorView(frame: CGRect(x:self.view.center.x-40, y:self.view.center.y-80, width:80.0, height:80.0))
         self.loadingCoverView.addSubview(self.myActivityIndicatorView)
@@ -55,7 +54,39 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         self.loadRoomList()
     }
-
+    
+    func showLoadingCell() {
+        if let selectedIndexPath: NSIndexPath = self.tableView.indexPathForSelectedRow() {
+            var cell = tableView.cellForRowAtIndexPath(selectedIndexPath)
+            self.tableView.userInteractionEnabled = false
+            self.navigationItem.rightBarButtonItem?.enabled = false
+            var coverView = UIView(frame: CGRectMake(0, 0, cell!.bounds.width, cell!.bounds.height))
+            coverView.tag = 1
+            coverView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
+            cell!.contentView.addSubview(coverView)
+            var cellActivityIndicator = DTIActivityIndicatorView(frame: CGRectMake(cell!.bounds.width-(cell!.bounds.width/2)-(cell!.bounds.height/2), 0, cell!.bounds.height, cell!.bounds.height))
+            cell!.contentView.addSubview(cellActivityIndicator)
+            cellActivityIndicator.tag = 2
+            cellActivityIndicator.indicatorColor = UIColor.whiteColor()
+            cellActivityIndicator.indicatorStyle = "spotify"
+            cellActivityIndicator.userInteractionEnabled = false
+            cellActivityIndicator.startActivity()
+        }
+    }
+    
+    func deselectCells() {
+        if let selectedIndexPath: NSIndexPath = self.tableView.indexPathForSelectedRow() {
+            var cell = tableView.cellForRowAtIndexPath(selectedIndexPath)
+            cell!.contentView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            if let coverView = cell!.viewWithTag(1) {
+                coverView.removeFromSuperview()
+            }
+            if let activityIndicator = cell!.viewWithTag(2) {
+                activityIndicator.removeFromSuperview()
+            }
+        }
+    }
+    
     func hideLoadingView() {
         self.myActivityIndicatorView.stopActivity(true)
         UIView.animateWithDuration(0.5, animations: {
@@ -114,8 +145,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "roomSegue" {
-            var roomVC = segue.destinationViewController as! RoomVC
-            roomVC.room_info = self.selectedRoom_info
+            weak var roomVC = segue.destinationViewController as? RoomVC
+            roomVC!.room_info = self.selectedRoom_info
         }
     }
     
@@ -179,10 +210,17 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         var cell = tableView.cellForRowAtIndexPath(indexPath)
         
         if self.noRoomsToShow == false {
-            cell!.contentView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.05)
-            
-            self.selectedRoom_info = self.rooms[indexPath.row]
-            self.performSegueWithIdentifier("roomSegue", sender: nil)
+            let room_info = self.rooms[indexPath.row]
+            if self.selectedRoom_info == nil || self.selectedRoom_info!["room_id"].intValue != room_info["room_id"].intValue {
+                cell!.contentView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.05)
+                self.selectedRoom_info = self.rooms[indexPath.row]
+                self.tabBarC.addRoomView(self.selectedRoom_info!)
+            }
+            else {
+                var alert = UIAlertController(title: "Sorry", message: "You are already a member of this room.", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
         }
     }
 

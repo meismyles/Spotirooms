@@ -9,16 +9,22 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import DTIActivityIndicator
 
 class LoginVC: UIViewController, SPTAuthViewDelegate {
     
     let userDefaults = NSUserDefaults.standardUserDefaults()
     var authViewController: SPTAuthViewController!
-    
+    @IBOutlet weak var loginButton: UIButton!
+    var activityIndicator: DTIActivityIndicatorView!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "sessionUpdatedNotification", name: "sessionUpdated", object: nil)
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     func sessionUpdatedNotification(notification: NSNotification) {
@@ -59,6 +65,13 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
     // IBAction Methods
     
     @IBAction func loginClicked(sender: AnyObject) {
+        self.loginButton.enabled = false
+        self.activityIndicator = DTIActivityIndicatorView(frame: CGRectMake(self.loginButton.bounds.width-(self.loginButton.bounds.width/2)-(self.loginButton.bounds.height/2), 0, self.loginButton.bounds.height, self.loginButton.bounds.height))
+        self.loginButton.addSubview(self.activityIndicator)
+        self.activityIndicator.indicatorColor = UIColor.whiteColor()
+        self.activityIndicator.indicatorStyle = "spotify"
+        self.activityIndicator.userInteractionEnabled = false
+        self.activityIndicator.startActivity()
         self.openLoginPage()
     }
     
@@ -68,6 +81,8 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
     
     func authenticationViewController(authenticationViewController: SPTAuthViewController!, didFailToLogin error: NSError!) {
         println("*** Failed to log in: \(error)")
+        self.activityIndicator.stopActivity()
+        self.loginButton.enabled = true
         var alert = UIAlertController(title: "Error", message: "Failed to log in to Spotify.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
@@ -105,6 +120,7 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
                         }
                         else {
                             self.userDefaults.setValue(json["token"].string, forKey: "session_token")
+                            self.activityIndicator.stopActivity()
                             self.showHome()
                         }
                     }
@@ -114,6 +130,8 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
     
     func authenticationViewControllerDidCancelLogin(authenticationViewController: SPTAuthViewController!) {
         println("*** Login cancelled.")
+        self.activityIndicator.stopActivity()
+        self.loginButton.enabled = true
     }
     
 }

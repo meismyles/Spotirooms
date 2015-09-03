@@ -7,27 +7,36 @@
 //
 
 import UIKit
+import MediaPlayer
 import SwiftyJSON
 import DTIActivityIndicator
 import WebImage
 
-class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UITableViewDataSource, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate {
+class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
     let userDefaults = NSUserDefaults.standardUserDefaults()
+    weak var tabBarC: TabBarC!
+    @IBOutlet weak var behindStatusBarView: UIView!
+    @IBOutlet weak var customNavBar: UINavigationBar!
+    @IBOutlet weak var customNavItem: UINavigationItem!
+    var minimiseButton: UIBarButtonItem!
     
     @IBOutlet weak var loadingCoverView: UIView!
     var myActivityIndicatorView: DTIActivityIndicatorView!
     var joinedRoom: Bool! = false
     var playerConnected: Bool! = false
+    var timeoutTimer: NSTimer!
     
-    var searchController : UISearchController!
+    var searchBar: UISearchBar!
     var searchActive: Bool = false
     var didPrevHaveResults: Bool = false
-    var storedAddButton: UIBarButtonItem!
+    var storedLeftBarButtons: [AnyObject]!
+    var storedRightBarButton: UIBarButtonItem!
     
     @IBOutlet weak var secondaryTitle: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
+    var track_uris = [NSURL]()
     var roomTrackData = [NSObject]()
     var searchResultData = [NSObject]()
     var loadingMoreResults: Bool = false
@@ -36,35 +45,46 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     var autoReturningFromSearch: Bool = false
     var addingTrack: Bool = false
     
+    @IBOutlet weak var currentInfoView: UIView!
     @IBOutlet weak var artworkView: UIImageView!
     @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var artistField: UILabel!
     @IBOutlet weak var durationField: UILabel!
     
     var room_info: JSON!
-    let socket = SocketIOClient(socketURL: Constants.socketURL, opts: [
-        "nsp": "/spotirooms",
-        "log": false
-    ])
+    var socket: SocketIOClient!
     var player: SPTAudioStreamingController!
     
+    var isPlaying: Bool! = false
+    
     override func viewDidLoad() {
-        self.storedAddButton = self.navigationItem.rightBarButtonItem
-        self.navigationItem.rightBarButtonItem?.enabled = false
+        // Handling data
+        let room_dict = self.room_info.dictionaryValue
+        self.customNavItem.title = room_info["name"].stringValue
+        self.secondaryTitle.text = "PLAYLIST"
         
-        // Setup search controller
-        self.searchController = UISearchController(searchResultsController:  nil)
-        self.searchController.delegate = self
-        self.searchController.searchBar.delegate = self
-        self.searchController.hidesNavigationBarDuringPresentation = false
-        self.searchController.dimsBackgroundDuringPresentation = false
-        self.searchController.searchBar.searchBarStyle = UISearchBarStyle.Default
-        self.searchController.searchBar.barStyle = UIBarStyle.Black
-        self.searchController.searchBar.tintColor = UIColor.whiteColor()
-        self.searchController.searchBar.sizeToFit()
+        // Setup nav bar
+        self.customNavBar.tintColor = UIColor.whiteColor()
+        self.minimiseButton = UIBarButtonItem(image: UIImage(named: "Room-Dismiss"), style: UIBarButtonItemStyle.Plain, target: self, action: "pressedMinimiseButton")
+        self.customNavItem.leftBarButtonItems?.append(self.minimiseButton)
+        self.storedLeftBarButtons = self.customNavItem.leftBarButtonItems
+        self.storedRightBarButton = self.customNavItem.rightBarButtonItem
+        self.customNavItem.leftBarButtonItem?.enabled = false
+        self.minimiseButton.enabled = false
+        self.customNavItem.rightBarButtonItem?.enabled = false
+        
+        self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
+        
+        // Setup search bar
+        self.searchBar = UISearchBar()
+        self.searchBar.delegate = self
+        self.searchBar.searchBarStyle = UISearchBarStyle.Default
+        self.searchBar.barStyle = UIBarStyle.Black
+        self.searchBar.tintColor = UIColor.whiteColor()
+        self.searchBar.sizeToFit()
         
         // Changes text input to be white
-        var textFieldInsideSearchBar = self.searchController.searchBar.valueForKey("searchField") as? UITextField
+        var textFieldInsideSearchBar = self.searchBar.valueForKey("searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = UIColor.whiteColor()
         if textFieldInsideSearchBar!.respondsToSelector(Selector("attributedPlaceholder")) {
             var color = UIColor.lightGrayColor()
@@ -81,11 +101,10 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         // Sets this view controller as presenting view controller for the search interface
         definesPresentationContext = true
         
-        // Handling data and setting up connections
-        let room_dict = self.room_info.dictionaryValue
-        self.title = room_info["name"].stringValue
-        self.secondaryTitle.text = "NEXT"
-        
+        self.socket = SocketIOClient(socketURL: Constants.socketURL, opts: [
+            "nsp": "/spotirooms",
+            "log": false
+        ])
         self.addHandlers()
     }
     
@@ -114,14 +133,19 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         self.handleNewSession()
         
         // Check we have connected within 30 secs or else timeout
-        var timer = NSTimer.scheduledTimerWithTimeInterval(30.0, target: self, selector: "checkConnect", userInfo: nil, repeats: false)
+        self.timeoutTimer = NSTimer.scheduledTimerWithTimeInterval(30.0, target: self, selector: "checkConnect", userInfo: nil, repeats: false)
     }
     
     // Hide the loading view after connecting
     func hideLoadingView() {
         if self.joinedRoom == true && self.playerConnected == true {
             self.myActivityIndicatorView.stopActivity(true)
-            self.navigationItem.rightBarButtonItem?.enabled = true
+            self.customNavItem.leftBarButtonItem?.enabled = true
+            self.minimiseButton.enabled = true
+            self.customNavItem.rightBarButtonItem?.enabled = true
+            if self.noTracksToShow == false {
+                self.startPlaying()
+            }
             UIView.animateWithDuration(0.5, animations: {
                 self.loadingCoverView.alpha = 0
                 }, completion: { _ in
@@ -132,27 +156,19 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        // Disconnect from server
-        self.socket.close(fast: false)
-        println("*** Socket Disconnected ***")
-        
-        // Disconnect from Spotify
-        var auth = SPTAuth.defaultInstance()
-        if self.player != nil {
-            self.player.logout({ (error: NSError!) -> Void in
-                if error != nil {
-                    println("*** Error logging out of player: \(error)")
-                }
-                println("*** Player Disconnected ***")
-            })
-        }
     }
     
-    // Clear image cache when view is destroyed
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.timeoutTimer.invalidate()
+    }
+    
     deinit {
+        println("DEINIT")
+        // Clear image cache when view is destroyed
         let imageManager = SDWebImageManager.sharedManager()
         imageManager.imageCache.clearMemory()
-        imageManager.imageCache.clearDisk()
+        imageManager.imageCache.cleanDisk()
     }
     
     // Check we are connected or else show timeout error
@@ -182,6 +198,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     
     // Server socket handlers
     func addHandlers() {
+        
         self.socket.on("connect") {data, ack in
             println("*** Socket Connected ***")
             self.socket.emit("join room", [
@@ -202,16 +219,15 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             else {
                 self.noTracksToShow = false
                 self.durationField.hidden = false
-                var track_uris = [NSURL]()
+                self.track_uris.removeAll()
                 for item in (response as! NSArray) {
                     let track = item as! NSDictionary
-                    track_uris.append(NSURL(string: track["track_id"] as! String)!)
+                    self.track_uris.append(NSURL(string: track["track_id"] as! String)!)
                 }
                 
                 // API IS LIMITED TO 50 - DO CONSECUTIVE CALLS
-                // *** Move the below to separate method and removeAll from filtered before running
                 var auth = SPTAuth.defaultInstance()
-                SPTTrack.tracksWithURIs(track_uris, session: auth.session, callback: { (error: NSError!, searchResults: AnyObject!) -> Void in
+                SPTTrack.tracksWithURIs(self.track_uris, session: auth.session, callback: { (error: NSError!, searchResults: AnyObject!) -> Void in
                     
                     if error != nil {
                         println("*** Error retreiving tracklist: \(error)")
@@ -231,6 +247,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                     
                     self.tableView.reloadData()
                     
+                    println("*** Joined Room ***")
                     self.joinedRoom = true
                     self.hideLoadingView()
                 })
@@ -334,16 +351,52 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         
         self.player.playURIs(playlistSnapshot.firstTrackPage.items, fromIndex: 0, callback: nil)
     })*/
-            
+    
+    @IBAction func pressedCloseButton() {
+        self.timeoutTimer.invalidate()
+        self.tabBarC.hideRoomViewForDestroy()
+    }
+    
+    func closeRoom() {
+        self.timeoutTimer.invalidate()
+        // Disconnect from server
+        self.socket.removeAllHandlers()
+        self.socket.close(fast: false)
+        println("*** Socket Disconnected ***")
+        
+        if self.player != nil {
+            // Stop playback
+            self.player.stop({ (error: NSError!) -> Void in
+                if error != nil {
+                    println("*** Error stopping playback: \(error)")
+                }
+                
+                // Disconnect from Spotify
+                self.player.logout({ (error: NSError!) -> Void in
+                    if error != nil {
+                        println("*** Error logging out of player: \(error)")
+                    }
+                    println("*** Player Disconnected ***")
+                })
+                // Remove room view
+                self.tabBarC.removeRoomView()
+            })
+        }
+    }
+    
+    func pressedMinimiseButton() {
+        self.timeoutTimer.invalidate()
+        self.tabBarC.minimiseRoom()
+    }
     
     @IBAction func pressedSearchButton() {
-        self.navigationItem.hidesBackButton = true
-        self.navigationItem.rightBarButtonItem = nil
+        self.customNavItem.leftBarButtonItems = nil
+        self.customNavItem.rightBarButtonItem = nil
         var cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "pressedCancelButton")
-        self.navigationItem.rightBarButtonItem = cancelButton
-        self.navigationItem.titleView = self.searchController.searchBar
-                
-        self.searchController.searchBar.becomeFirstResponder()
+        self.customNavItem.rightBarButtonItem = cancelButton
+        self.customNavItem.titleView = self.searchBar
+        
+        self.searchBar.becomeFirstResponder()
     }
     
     func pressedCancelButton() {
@@ -353,14 +406,14 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         }
         
         self.tableView.tableFooterView = nil
-        self.searchController.searchBar.text = nil
-        self.navigationItem.hidesBackButton = false
-        self.navigationItem.rightBarButtonItem = self.storedAddButton
-        self.navigationItem.titleView = nil
+        self.searchBar.text = nil
+        self.customNavItem.hidesBackButton = false
+        self.customNavItem.leftBarButtonItems = self.storedLeftBarButtons
+        self.customNavItem.rightBarButtonItem = self.storedRightBarButton
+        self.customNavItem.titleView = nil
         
+        self.searchBar(self.searchBar, textDidChange: "") // also calls table reload
         self.searchActive = false
-        
-        self.searchBar(self.searchController.searchBar, textDidChange: "") // also call table reload
     }
     
     func loadResults(searchTerm: String!) {
@@ -454,9 +507,28 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         
         var seconds = ti % 60
         var minutes = (ti / 60) % 60
-        //var hours = (ti / 3600)
+        var hours = (ti / 3600)
         
-        return String(format: "%0.2d:%0.2d",minutes,seconds)
+        if hours < 1 {
+            return String(format: "%0.2d:%0.2d",minutes,seconds)
+        }
+        else {
+            return String(format: "%0.2d:%0.2d:%0.2d",hours,minutes,seconds)
+        }
+    }
+    
+    func startPlaying() {
+        // API IS LIMITED TO 100 - DO CONSECUTIVE CALLS
+        self.player.playURIs(self.track_uris, withOptions: nil, callback: { (error: NSError!) -> Void in
+            if error != nil {
+                println("*** Error playing tracks: \(error)")
+                var alert = UIAlertController(title: "Error", message: "Problem starting playback.", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in self.handleAlert(alert, action: action)}))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+        })
+
     }
     
     ////////////////////////////////////////////////////////////
@@ -472,7 +544,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             count = self.searchResultData.count
         }
         else if self.noTracksToShow == false {
-            count = self.roomTrackData.count-1
+            count = self.roomTrackData.count == 1 ? self.roomTrackData.count : self.roomTrackData.count-1
         }
         return count
     }
@@ -502,22 +574,29 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             self.titleField.text = partialTrack.name
             self.artistField.text = artistName
             self.durationField.text = self.stringFromTimeInterval(partialTrack.duration)
-            self.artworkView.sd_setImageWithURL(partialTrack.album.largestCover.imageURL,
-                placeholderImage: UIImage(named: "Artwork-Placeholder"),
-                completed: { (image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) in
-                    
-                    if error != nil {
-                        println("*** Error downloading image: \(error)")
-                        return
-                    }
-                    
-                    if image != nil && cacheType == SDImageCacheType.None {
-                        self.artworkView.alpha = 0.0;
-                        UIView.animateWithDuration(0.3, animations: {
-                            self.artworkView.alpha = 1.0
-                        })
-                    }
-            })
+            if let imageURL = partialTrack.album?.largestCover?.imageURL {
+                self.artworkView.sd_setImageWithURL(imageURL,
+                    placeholderImage: UIImage(named: "Artwork-Placeholder"),
+                    completed: { (image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) in
+                        
+                        if error != nil {
+                            println("*** Error downloading image: \(error)")
+                            return
+                        }
+                        
+                        if image != nil && cacheType == SDImageCacheType.None {
+                            self.artworkView.alpha = 0.0;
+                            UIView.animateWithDuration(0.3, animations: {
+                                self.artworkView.alpha = 1.0
+                            })
+                            if self.isPlaying == true {
+                                MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+                                    MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: image)
+                                ]
+                            }
+                        }
+                })
+            }
         }
         else if indexPath.row == 0 && self.noTracksToShow == true {
             self.durationField.hidden = true
@@ -560,27 +639,29 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                 // Set label fields and artwork border
                 cell!.titleField.text = partialTrack.name
                 cell!.artistField.text = artistName
-                cell!.artworkView.sd_setImageWithURL(partialTrack.album.smallestCover.imageURL,
-                    placeholderImage: UIImage(named: "Artwork-Placeholder"),
-                    options: SDWebImageOptions.CacheMemoryOnly,
-                    completed: { (image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) in
-                        
-                        if error != nil {
-                            println("*** Error downloading image: \(error)")
-                            return
-                        }
-                        
-                        if image != nil && cacheType == SDImageCacheType.None {
-                            cell!.artworkView.alpha = 0.0;
-                            UIView.animateWithDuration(0.3, animations: {
-                                cell!.artworkView.alpha = 1.0
-                            })
-                        }
-                })
+                if let imageURL = partialTrack.album?.smallestCover?.imageURL {
+                    cell!.artworkView.sd_setImageWithURL(imageURL,
+                        placeholderImage: UIImage(named: "Artwork-Placeholder"),
+                        options: SDWebImageOptions.CacheMemoryOnly,
+                        completed: { (image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) in
+                            
+                            if error != nil {
+                                println("*** Error downloading image: \(error)")
+                                return
+                            }
+                            
+                            if image != nil && cacheType == SDImageCacheType.None {
+                                cell!.artworkView.alpha = 0.0;
+                                UIView.animateWithDuration(0.3, animations: {
+                                    cell!.artworkView.alpha = 1.0
+                                })
+                            }
+                    })
+                }
                 cell!.artworkView.layer.shadowColor = UIColor.blackColor().CGColor
                 cell!.artworkView.layer.shadowOffset = CGSizeMake(0, 0)
-                cell!.artworkView.layer.shadowOpacity = 0.7
-                cell!.artworkView.layer.shadowRadius = 2.5
+                cell!.artworkView.layer.shadowOpacity = 0.4
+                cell!.artworkView.layer.shadowRadius = 2.0
                 
                 if self.shown_listPage != nil {
                     if indexPath.row == self.searchResultData.count-1 && self.shown_listPage.hasNextPage == true {
@@ -614,20 +695,20 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                 return cell!
             }
         }
-        // IN ROOM TRACKLIST BUT NO TRACKS TO SHOW
-        else if self.noTracksToShow == true {
+        // IN ROOM TRACKLIST BUT EITHER ONLY 1 TRACK OR NO TRACKS TO SHOW
+        else if self.noTracksToShow == true || self.roomTrackData.count == 1 {
             var cell = tableView.dequeueReusableCellWithIdentifier("cell") as? UITableViewCell
             
             if cell == nil {
-                cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "cell")
+                cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "cell")
             }
             
-            cell!.textLabel?.text = ""
-            cell!.detailTextLabel?.text = "Nothing to see here!"
+            cell!.textLabel?.text = "No tracks in playlist."
+            cell!.detailTextLabel?.text = ""
             
             cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
             cell!.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 16)
-            cell!.textLabel?.textColor = UIColor.whiteColor()
+            cell!.textLabel?.textColor = UIColor.lightGrayColor()
             cell!.detailTextLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 13)
             cell!.detailTextLabel?.textColor = UIColor.lightGrayColor()
             cell!.selectionStyle = UITableViewCellSelectionStyle.None
@@ -666,26 +747,28 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             cell!.titleField.text = partialTrack.name
             cell!.artistField.text = artistName
             cell!.durationField.text = self.stringFromTimeInterval(partialTrack.duration)
-            cell!.artworkView.sd_setImageWithURL(partialTrack.album.smallestCover.imageURL,
-                placeholderImage: UIImage(named: "Artwork-Placeholder"),
-                completed: { (image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) in
-                    
-                    if error != nil {
-                        println("*** Error downloading image: \(error)")
-                        return
-                    }
-                    
-                    if image != nil && cacheType == SDImageCacheType.None {
-                        cell!.artworkView.alpha = 0.0;
-                        UIView.animateWithDuration(0.3, animations: {
-                            cell!.artworkView.alpha = 1.0
-                        })
-                    }
-            })
+            if let imageURL = partialTrack.album?.smallestCover?.imageURL {
+                cell!.artworkView.sd_setImageWithURL(imageURL,
+                    placeholderImage: UIImage(named: "Artwork-Placeholder"),
+                    completed: { (image: UIImage!, error: NSError!, cacheType: SDImageCacheType, imageURL: NSURL!) in
+                        
+                        if error != nil {
+                            println("*** Error downloading image: \(error)")
+                            return
+                        }
+                        
+                        if image != nil && cacheType == SDImageCacheType.None {
+                            cell!.artworkView.alpha = 0.0;
+                            UIView.animateWithDuration(0.3, animations: {
+                                cell!.artworkView.alpha = 1.0
+                            })
+                        }
+                })
+            }
             cell!.artworkView.layer.shadowColor = UIColor.blackColor().CGColor
             cell!.artworkView.layer.shadowOffset = CGSizeMake(0, 0)
-            cell!.artworkView.layer.shadowOpacity = 0.7
-            cell!.artworkView.layer.shadowRadius = 2.5
+            cell!.artworkView.layer.shadowOpacity = 0.4
+            cell!.artworkView.layer.shadowRadius = 2.0
             
             cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
             cell!.selectionStyle = UITableViewCellSelectionStyle.None
@@ -735,6 +818,12 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         }
     }
     
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        if self.searchActive == false {
+            self.pressedCancelButton()
+        }
+    }
+    
     ////////////////////////////////////////////////////////////
     // UISearchBar Delegates
     
@@ -742,31 +831,63 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         
         self.tableView.tableFooterView = nil
         
-        // Start search when 3+ chars are entered
         if count(searchTerm) > 0 {
+            if self.searchActive == false {
+                var largerFrame = self.view.frame
+                largerFrame.size.height += 90
+                self.view.frame = largerFrame
+                self.slideUpForResults()
+            }
             self.searchActive = true
             self.secondaryTitle.text = "SEARCH RESULTS"
             self.loadResults(searchTerm)
         }
         else if self.autoReturningFromSearch == true {
+            if self.searchActive == true {
+                var smallerFrame = self.view.frame
+                smallerFrame.size.height -= 90
+                self.view.frame = smallerFrame
+                self.slideDownForTracklist()
+            }
             self.didPrevHaveResults = false
             self.searchActive = false
-            self.secondaryTitle.text = "NEXT"
+            self.secondaryTitle.text = "PLAYLIST"
             self.tableView!.reloadData()
         }
         else {
+            if self.searchActive == true {
+                var smallerFrame = self.view.frame
+                smallerFrame.size.height -= 90
+                self.view.frame = smallerFrame
+                self.slideDownForTracklist()
+            }
             self.didPrevHaveResults = false
             self.searchResultData.removeAll() // clear old data first
             self.searchActive = false
-            self.secondaryTitle.text = "NEXT"
+            self.secondaryTitle.text = "PLAYLIST"
             self.tableView!.reloadData()
         }
     }
     
-    func didPresentSearchController(searchController: UISearchController) {
-        searchController.searchBar.showsCancelButton = false
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        self.searchBar.resignFirstResponder()
     }
-
+    
+    func slideUpForResults() {
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.view.transform = CGAffineTransformMakeTranslation(0, -90)
+            self.behindStatusBarView.transform = CGAffineTransformMakeTranslation(0, 90)
+            self.customNavBar.transform = CGAffineTransformMakeTranslation(0, 90)
+        }, completion: nil)
+    }
+    
+    func slideDownForTracklist() {
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.view.transform = CGAffineTransformMakeTranslation(0, 0)
+            self.behindStatusBarView.transform = CGAffineTransformMakeTranslation(0, 0)
+            self.customNavBar.transform = CGAffineTransformMakeTranslation(0, 0)
+        }, completion: nil)
+    }
     
     ////////////////////////////////////////////////////////////
     // Track Player Delegates
@@ -782,9 +903,28 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     }
     
     func audioStreaming(audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        self.isPlaying = isPlaying
         println("*** Playing: \(isPlaying)")
+        if isPlaying == true {
+            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+                MPMediaItemPropertyArtist: self.artistField.text!,
+                MPMediaItemPropertyTitle: self.titleField.text!,
+                MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.artworkView.image)
+            ]
+        }
+        else {
+            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nil
+        }
     }
-
+    
+    func audioStreaming(audioStreaming: SPTAudioStreamingController!, didChangeToTrack trackMetadata: [NSObject : AnyObject]!) {
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+            MPMediaItemPropertyArtist: self.artistField.text!,
+            MPMediaItemPropertyTitle: self.titleField.text!,
+            MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.artworkView.image)
+        ]
+    }
+    
     // Lost internet conncetion
     func audioStreamingDidDisconnect(audioStreaming: SPTAudioStreamingController!) {
         var alert = UIAlertController(title: "Connection Error", message: "Lost connection to Spotify.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -793,3 +933,4 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     }
     
 }
+

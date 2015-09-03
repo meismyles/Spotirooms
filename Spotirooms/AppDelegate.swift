@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().barStyle = UIBarStyle.Black
         UITabBar.appearance().tintColor = UIColor.whiteColor()
+        UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
         
         var auth: SPTAuth = SPTAuth.defaultInstance()
         auth.clientID = Constants.clientID
@@ -97,6 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        UIApplication.sharedApplication().endReceivingRemoteControlEvents()
     }
 
 

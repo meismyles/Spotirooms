@@ -29,6 +29,7 @@
 		002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */; };
 		002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DCD1B79637B006C478D /* LoginVC.swift */; };
 		0055AB9B1B925FF600A7ACB4 /* RoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */; };
+		007B9C211B97338000C17EA3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007B9C201B97338000C17EA3 /* MediaPlayer.framework */; };
 		00893F921B889B0000A32308 /* RoomListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00893F911B889B0000A32308 /* RoomListVC.swift */; };
 		00893FE01B88A15900A32308 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00893FCA1B88A0E800A32308 /* Alamofire.framework */; };
 		00893FE11B88A15900A32308 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 00893FCA1B88A0E800A32308 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -49,6 +50,8 @@
 		0089404D1B90DD8000A32308 /* SocketTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008940401B90DD7F00A32308 /* SocketTypes.swift */; };
 		0089404E1B90DD8000A32308 /* SwiftRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008940411B90DD7F00A32308 /* SwiftRegex.swift */; };
 		0089404F1B90DD8000A32308 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008940421B90DD7F00A32308 /* WebSocket.swift */; };
+		009289F71B979718004E2787 /* TabBarC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009289F61B979718004E2787 /* TabBarC.swift */; };
+		00928A081B98AD4D004E2787 /* Room-Dismiss.png in Resources */ = {isa = PBXBuildFile; fileRef = 00928A071B98AD4D004E2787 /* Room-Dismiss.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +233,7 @@
 		002A3DCD1B79637B006C478D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		002A3DD01B796518006C478D /* Spotirooms-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Spotirooms-Bridging-Header.h"; sourceTree = "<group>"; };
 		0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomVC.swift; sourceTree = "<group>"; };
+		007B9C201B97338000C17EA3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		00893F911B889B0000A32308 /* RoomListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomListVC.swift; sourceTree = "<group>"; };
 		00893FC21B88A0E800A32308 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		00893FD11B88A14A00A32308 /* SwiftyJSON.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SwiftyJSON.xcodeproj; path = SwiftyJSON/SwiftyJSON.xcodeproj; sourceTree = "<group>"; };
@@ -248,6 +252,8 @@
 		008940401B90DD7F00A32308 /* SocketTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketTypes.swift; sourceTree = "<group>"; };
 		008940411B90DD7F00A32308 /* SwiftRegex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftRegex.swift; sourceTree = "<group>"; };
 		008940421B90DD7F00A32308 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		009289F61B979718004E2787 /* TabBarC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarC.swift; sourceTree = "<group>"; };
+		00928A071B98AD4D004E2787 /* Room-Dismiss.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Room-Dismiss.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +261,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				007B9C211B97338000C17EA3 /* MediaPlayer.framework in Frameworks */,
 				0010EDF91B96226E00399043 /* ImageIO.framework in Frameworks */,
 				002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */,
 				002A3DCA1B795D7D006C478D /* AVFoundation.framework in Frameworks */,
@@ -305,6 +312,7 @@
 		0010EDD61B94F47500399043 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				00928A071B98AD4D004E2787 /* Room-Dismiss.png */,
 				0010EE071B96746C00399043 /* No-Tracks-Placeholder.png */,
 				0010EDDE1B95023A00399043 /* Artwork-Placeholder.png */,
 				0010EDD71B94F47500399043 /* Tabbar */,
@@ -378,6 +386,7 @@
 				002A3DA41B795761006C478D /* AppDelegate.swift */,
 				002A3DCD1B79637B006C478D /* LoginVC.swift */,
 				002A3DAA1B795761006C478D /* Main.storyboard */,
+				009289F61B979718004E2787 /* TabBarC.swift */,
 				00893FE91B8BE69800A32308 /* NewRoomVC.swift */,
 				00893F911B889B0000A32308 /* RoomListVC.swift */,
 				0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */,
@@ -420,6 +429,7 @@
 		002A3DC61B795C78006C478D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				007B9C201B97338000C17EA3 /* MediaPlayer.framework */,
 				0010EDF81B96226E00399043 /* ImageIO.framework */,
 				008940351B90DD7F00A32308 /* SocketIOClientSwift */,
 				002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */,
@@ -530,7 +540,7 @@
 						DevelopmentTeam = 923CWAH3CT;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -684,6 +694,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0010EDDF1B95023A00399043 /* Artwork-Placeholder.png in Resources */,
+				00928A081B98AD4D004E2787 /* Room-Dismiss.png in Resources */,
 				0010EE081B96746C00399043 /* No-Tracks-Placeholder.png in Resources */,
 				002A3DAC1B795761006C478D /* Main.storyboard in Resources */,
 				002A3DB11B795761006C478D /* LaunchScreen.xib in Resources */,
@@ -712,6 +723,7 @@
 				008940441B90DD7F00A32308 /* SocketAnyEvent.swift in Sources */,
 				0089404C1B90DD8000A32308 /* SocketParser.swift in Sources */,
 				008940461B90DD7F00A32308 /* SocketEngineClient.swift in Sources */,
+				009289F71B979718004E2787 /* TabBarC.swift in Sources */,
 				0010EE061B965A8300399043 /* TrackListCell.swift in Sources */,
 				0089404A1B90DD8000A32308 /* SocketLogger.swift in Sources */,
 				002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */,
