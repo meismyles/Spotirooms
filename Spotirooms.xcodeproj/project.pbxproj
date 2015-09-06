@@ -29,6 +29,14 @@
 		002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */; };
 		002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DCD1B79637B006C478D /* LoginVC.swift */; };
 		0055AB9B1B925FF600A7ACB4 /* RoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */; };
+		006734B31B99067B000162D4 /* Room-Maximise.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734B21B99067B000162D4 /* Room-Maximise.png */; };
+		006734C11B9A0FA3000162D4 /* Starred.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734BF1B9A0FA3000162D4 /* Starred.png */; };
+		006734C21B9A0FA3000162D4 /* Unstarred.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734C01B9A0FA3000162D4 /* Unstarred.png */; };
+		006734C61B9A193E000162D4 /* Gold-Upvote.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734C31B9A193E000162D4 /* Gold-Upvote.png */; };
+		006734C71B9A193E000162D4 /* Upvote-Tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734C41B9A193E000162D4 /* Upvote-Tick.png */; };
+		006734C81B9A193E000162D4 /* Upvote.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734C51B9A193E000162D4 /* Upvote.png */; };
+		006734CA1B9A276A000162D4 /* Upvote-Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734C91B9A276A000162D4 /* Upvote-Background.png */; };
+		006734CC1B9A4FF0000162D4 /* Upvote-Background-Gold.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734CB1B9A4FF0000162D4 /* Upvote-Background-Gold.png */; };
 		007B9C211B97338000C17EA3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 007B9C201B97338000C17EA3 /* MediaPlayer.framework */; };
 		00893F921B889B0000A32308 /* RoomListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00893F911B889B0000A32308 /* RoomListVC.swift */; };
 		00893FE01B88A15900A32308 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00893FCA1B88A0E800A32308 /* Alamofire.framework */; };
@@ -233,6 +241,14 @@
 		002A3DCD1B79637B006C478D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		002A3DD01B796518006C478D /* Spotirooms-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Spotirooms-Bridging-Header.h"; sourceTree = "<group>"; };
 		0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomVC.swift; sourceTree = "<group>"; };
+		006734B21B99067B000162D4 /* Room-Maximise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Room-Maximise.png"; sourceTree = "<group>"; };
+		006734BF1B9A0FA3000162D4 /* Starred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Starred.png; sourceTree = "<group>"; };
+		006734C01B9A0FA3000162D4 /* Unstarred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Unstarred.png; sourceTree = "<group>"; };
+		006734C31B9A193E000162D4 /* Gold-Upvote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Gold-Upvote.png"; sourceTree = "<group>"; };
+		006734C41B9A193E000162D4 /* Upvote-Tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upvote-Tick.png"; sourceTree = "<group>"; };
+		006734C51B9A193E000162D4 /* Upvote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Upvote.png; sourceTree = "<group>"; };
+		006734C91B9A276A000162D4 /* Upvote-Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upvote-Background.png"; sourceTree = "<group>"; };
+		006734CB1B9A4FF0000162D4 /* Upvote-Background-Gold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upvote-Background-Gold.png"; sourceTree = "<group>"; };
 		007B9C201B97338000C17EA3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		00893F911B889B0000A32308 /* RoomListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomListVC.swift; sourceTree = "<group>"; };
 		00893FC21B88A0E800A32308 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
@@ -312,6 +328,14 @@
 		0010EDD61B94F47500399043 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				006734CB1B9A4FF0000162D4 /* Upvote-Background-Gold.png */,
+				006734C91B9A276A000162D4 /* Upvote-Background.png */,
+				006734C31B9A193E000162D4 /* Gold-Upvote.png */,
+				006734C41B9A193E000162D4 /* Upvote-Tick.png */,
+				006734C51B9A193E000162D4 /* Upvote.png */,
+				006734BF1B9A0FA3000162D4 /* Starred.png */,
+				006734C01B9A0FA3000162D4 /* Unstarred.png */,
+				006734B21B99067B000162D4 /* Room-Maximise.png */,
 				00928A071B98AD4D004E2787 /* Room-Dismiss.png */,
 				0010EE071B96746C00399043 /* No-Tracks-Placeholder.png */,
 				0010EDDE1B95023A00399043 /* Artwork-Placeholder.png */,
@@ -693,11 +717,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006734CC1B9A4FF0000162D4 /* Upvote-Background-Gold.png in Resources */,
 				0010EDDF1B95023A00399043 /* Artwork-Placeholder.png in Resources */,
 				00928A081B98AD4D004E2787 /* Room-Dismiss.png in Resources */,
 				0010EE081B96746C00399043 /* No-Tracks-Placeholder.png in Resources */,
+				006734C11B9A0FA3000162D4 /* Starred.png in Resources */,
+				006734C21B9A0FA3000162D4 /* Unstarred.png in Resources */,
 				002A3DAC1B795761006C478D /* Main.storyboard in Resources */,
 				002A3DB11B795761006C478D /* LaunchScreen.xib in Resources */,
+				006734C71B9A193E000162D4 /* Upvote-Tick.png in Resources */,
+				006734CA1B9A276A000162D4 /* Upvote-Background.png in Resources */,
+				006734B31B99067B000162D4 /* Room-Maximise.png in Resources */,
+				006734C61B9A193E000162D4 /* Gold-Upvote.png in Resources */,
+				006734C81B9A193E000162D4 /* Upvote.png in Resources */,
 				0010EDDC1B94F47500399043 /* discover.png in Resources */,
 				0010EDDD1B94F47500399043 /* profile.png in Resources */,
 				002A3DAE1B795761006C478D /* Images.xcassets in Resources */,

@@ -25,6 +25,7 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.loginButton.enabled = true
     }
     
     func sessionUpdatedNotification(notification: NSNotification) {
@@ -93,7 +94,6 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
         
         SPTUser.requestCurrentUserWithAccessToken(auth.session.accessToken, callback: { (error: NSError!, results: AnyObject!) -> Void in
             let user = results as! SPTUser
-            
             let parameters = [
                 "username": user.canonicalUserName,
                 "fullname": user.displayName,
@@ -106,6 +106,8 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
                         NSLog("***** ERROR: \(error)")
                         println("***** REQUEST: \(request)")
                         println("***** RESPONSE: \(response)")
+                        self.activityIndicator.stopActivity()
+                        self.loginButton.enabled = true
                         var alert = UIAlertController(title: "Error", message: "Could not connect to server.", preferredStyle: UIAlertControllerStyle.Alert)
                         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
                         self.presentViewController(alert, animated: true, completion: nil)
@@ -114,6 +116,8 @@ class LoginVC: UIViewController, SPTAuthViewDelegate {
                         var json = JSON(json!)
                         // Server Error
                         if let error = json["error"].string {
+                            self.activityIndicator.stopActivity()
+                            self.loginButton.enabled = true
                             var alert = UIAlertController(title: "Error", message: error, preferredStyle: UIAlertControllerStyle.Alert)
                             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
                             self.presentViewController(alert, animated: true, completion: nil)

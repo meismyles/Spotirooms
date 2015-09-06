@@ -27,6 +27,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var rooms: Array<JSON>! = []
     var selectedRoom_info: JSON?
     var noRoomsToShow: Bool = true
+    var newRoomID: Int?
+    var selectedIndexPath: NSIndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +77,10 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func deselectCells() {
-        if let selectedIndexPath: NSIndexPath = self.tableView.indexPathForSelectedRow() {
+        if self.tableView.indexPathForSelectedRow() != nil {
+            self.selectedIndexPath = self.tableView.indexPathForSelectedRow()
+        }
+        if let selectedIndexPath: NSIndexPath = self.selectedIndexPath {
             var cell = tableView.cellForRowAtIndexPath(selectedIndexPath)
             cell!.contentView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
             if let coverView = cell!.viewWithTag(1) {
@@ -84,6 +89,7 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             if let activityIndicator = cell!.viewWithTag(2) {
                 activityIndicator.removeFromSuperview()
             }
+            self.selectedIndexPath = nil
         }
     }
     
@@ -129,6 +135,18 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                     }
                     self.refreshControl.endRefreshing()
                     self.tableView.reloadData()
+                    
+                    if let room_id = self.newRoomID {
+                        for var i = 0; i < self.rooms.count; i++ {
+                            let room = self.rooms[i]
+                            if room_id == room["room_id"].intValue {
+                                let indexPath = NSIndexPath(forRow: i, inSection: 0)
+                                self.selectedIndexPath = indexPath
+                                self.tableView(self.tableView, didSelectRowAtIndexPath: indexPath)
+                            }
+                        }
+                        self.newRoomID = nil
+                    }
                 }
         }
     }
@@ -137,16 +155,20 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         self.performSegueWithIdentifier("newRoom", sender: nil)
     }
     
-    @IBAction func endNewRoom(segue: UIStoryboardSegue) {
-        if segue.identifier == "finishNewRoom" {
-            self.loadRoomList()
-        }
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "roomSegue" {
             weak var roomVC = segue.destinationViewController as? RoomVC
             roomVC!.room_info = self.selectedRoom_info
+        }
+    }
+    
+    @IBAction func endNewRoom(segue: UIStoryboardSegue) {
+        if segue.identifier == "finishNewRoom" {
+            weak var newRoomVC = segue.sourceViewController as? NewRoomVC
+            if let room_id = newRoomVC?.room_id {
+                self.newRoomID = room_id
+            }
+            self.loadRoomList()
         }
     }
     
@@ -222,8 +244,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                 self.presentViewController(alert, animated: true, completion: nil)
             }
         }
-    }
 
+    }
 
 }
 

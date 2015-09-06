@@ -20,6 +20,7 @@ class NewRoomVC: UIViewController {
     @IBOutlet weak var name_field: UITextField!
     var public_or_private: Int! = 0
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    var room_id: Int?
     
     override func viewDidAppear(animated: Bool) {
         self.name_field.becomeFirstResponder()
@@ -71,6 +72,7 @@ class NewRoomVC: UIViewController {
                             self.presentViewController(alert, animated: true, completion: nil)
                         }
                         else {
+                            self.room_id = json["room_id"].intValue
                             self.performSegueWithIdentifier("finishNewRoom", sender: nil)
                         }
                     }

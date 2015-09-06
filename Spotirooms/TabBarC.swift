@@ -26,6 +26,7 @@ class TabBarC: UITabBarController, UITabBarDelegate {
     var roomMinimised: Bool! = false
     var transferToNewRoom: Bool! = false
     var store_selectedRoom_info: JSON?
+    var invalidSession: Bool! = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,7 +106,7 @@ class TabBarC: UITabBarController, UITabBarDelegate {
     func minimiseRoom() {
         if self.activeRoom == true {
             self.discoverVC.loadRoomList()
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: nil, animations: {
+            UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: nil, animations: {
                 self.roomNavC.view.transform = CGAffineTransformMakeTranslation(0, self.view.frame.maxY-self.theTabBar.bounds.height-64)
                 self.roomVC.customNavBar.alpha = 0
                 self.roomVC.behindStatusBarView.alpha = 0
@@ -138,6 +139,9 @@ class TabBarC: UITabBarController, UITabBarDelegate {
                 self.roomNavC.view.transform = CGAffineTransformMakeTranslation(0, self.view.frame.maxY)
                 self.theTabBar.transform = CGAffineTransformMakeTranslation(0, 0)
                 }, completion: { _ in
+                    if self.roomVC.invalidSession == true {
+                        self.invalidSession = true
+                    }
                     self.roomVC.closeRoom()
             })
         }
@@ -155,7 +159,10 @@ class TabBarC: UITabBarController, UITabBarDelegate {
             self.roomNavC = nil
             self.activeRoom = false
             
-            if self.transferToNewRoom == true {
+            if self.invalidSession == true {
+                self.navigationController?.popToRootViewControllerAnimated(true)
+            }
+            else if self.transferToNewRoom == true {
                 self.addRoomView(self.store_selectedRoom_info!)
                 self.store_selectedRoom_info = nil
             }

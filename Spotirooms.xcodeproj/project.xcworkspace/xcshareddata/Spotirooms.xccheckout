@@ -7,7 +7,7 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>D9F2DCBA-F4C0-46D2-B659-9C0B334A9288</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Spotirooms</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>31A91CAF3B0B14E0A1DA949E11DDCD3AA60F263B</key>
@@ -16,7 +16,7 @@
 		<string>https://github.com/Alamofire/Alamofire.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Spotirooms.xcodeproj</string>
+	<string>Spotirooms.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>31A91CAF3B0B14E0A1DA949E11DDCD3AA60F263B</key>

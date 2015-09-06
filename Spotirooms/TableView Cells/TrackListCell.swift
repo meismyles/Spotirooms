@@ -14,5 +14,7 @@ class TrackListCell: UITableViewCell {
     @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var artistField: UILabel!
     @IBOutlet weak var durationField: UILabel!
+    @IBOutlet weak var playNumber: UILabel!
+    @IBOutlet weak var upvoteButton: UIButton!
     
 }
