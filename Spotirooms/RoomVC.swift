@@ -12,8 +12,9 @@ import SwiftyJSON
 import DTIActivityIndicator
 import WebImage
 
-class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, MCBroadcastDelegate {
     
+    let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let userDefaults = NSUserDefaults.standardUserDefaults()
     weak var tabBarC: TabBarC!
     @IBOutlet weak var behindStatusBarView: UIView!
@@ -35,14 +36,13 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     var searchActive: Bool = false
     var didPrevHaveResults: Bool = false
     var storedLeftBarButtons: [AnyObject]!
-    var storedRightBarButton: UIBarButtonItem!
+    var storedRightBarButtons: [AnyObject]!
     
     @IBOutlet weak var secondaryTitle: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
     var track_uris = [NSURL]()
-    var roomTrackDataSpotify = [NSObject]()
-    var roomTrackDataSpotirooms = [NSDictionary]()
+    var roomTrackData = [NSDictionary]()
     var searchResultData = [NSObject]()
     var loadingMoreResults: Bool = false
     var shown_listPage: SPTListPage!
@@ -72,7 +72,19 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     var isPlaying: Bool! = false
     var isReplacingURIs: Bool! = false
     
+    // Local sync stuff
+    var ls_syncButton: UIBarButtonItem!
+    var ls_Manager: MCBroadcast?
+    var ls_Message: MCObject = MCObject()
+    var ls_timeSyncWasPressed: NSTimeInterval!
+    var ls_DeviceIsSlave: Bool! = false
+    var ls_connected: Bool! = false
+    var netAssoc: NetAssociation!
+    var ls_currentTrackStartTime: NSTimeInterval = 0.0
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         // Handling data
         let room_dict = self.room_info.dictionaryValue
         self.customNavItem.title = room_info["name"].stringValue
@@ -83,11 +95,14 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         self.customNavBar.tintColor = UIColor.whiteColor()
         self.minimiseButton = UIBarButtonItem(image: UIImage(named: "Room-Dismiss"), style: UIBarButtonItemStyle.Plain, target: self, action: "pressedMinimiseButton")
         self.customNavItem.leftBarButtonItems?.append(self.minimiseButton)
+        self.ls_syncButton = UIBarButtonItem(image: UIImage(named: "Sync-Button"), style: UIBarButtonItemStyle.Plain, target: self, action: "pressedSyncButton")
+        self.customNavItem.rightBarButtonItems?.append(self.ls_syncButton)
         self.storedLeftBarButtons = self.customNavItem.leftBarButtonItems
-        self.storedRightBarButton = self.customNavItem.rightBarButtonItem
+        self.storedRightBarButtons = self.customNavItem.rightBarButtonItems
         self.customNavItem.leftBarButtonItem?.enabled = false
         self.minimiseButton.enabled = false
         self.customNavItem.rightBarButtonItem?.enabled = false
+        self.ls_syncButton.enabled = false
         
         self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
         
@@ -133,12 +148,13 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         
         // Put separator above first table cell, set background colour and change insets
         self.tableView.layoutMargins = UIEdgeInsetsMake(0, 16, 0, 0)
-        self.tableView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
-        var line = CALayer()
+        //self.tableView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        self.tableView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
+        /*var line = CALayer()
         line.borderColor = self.tableView.separatorColor.CGColor
         line.borderWidth = 1
         line.frame = CGRectMake(16, 0, UIScreen.mainScreen().bounds.width-16, 1 / UIScreen.mainScreen().scale)
-        self.tableView.layer.addSublayer(line)
+        self.tableView.layer.addSublayer(line)*/
         
         // Currently playing hide in case no tracks and sort artwork shadow
         self.durationField.hidden = true
@@ -161,6 +177,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
         // Connect to server and Spotify
         self.socket.connect()
         self.handleNewSession()
@@ -263,7 +280,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                 self.track_uris.removeAll()
                 for item in (response as! NSArray) {
                     let track = item as! NSDictionary
-                    self.roomTrackDataSpotirooms.append(track)
+                    self.roomTrackData.append(track)
                     self.track_uris.append(NSURL(string: track["track_id"] as! String)!)
                 }
                 
@@ -282,9 +299,9 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                     
                     let all_tracks = searchResults as! NSArray
                     
-                    for item in all_tracks {
-                        let track = item as! SPTTrack
-                        self.roomTrackDataSpotify.append(track)
+                    for var i = 0; i < all_tracks.count; i++ {
+                        let track = all_tracks[i] as! SPTTrack
+                        self.roomTrackData[i].setValue(track, forKey: "SPTTrack")
                     }
                     
                     self.tableView.reloadData()
@@ -322,7 +339,6 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         
         self.socket.on("add track success") {data, ack in
             var dict = data![0] as! NSDictionary
-            self.roomTrackDataSpotirooms.append(dict)
             var track_id: AnyObject! = dict["track_id"]
             
             self.customNavItem.leftBarButtonItem?.enabled = true
@@ -342,7 +358,8 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                 
                 let track = searchResults as! SPTTrack
                 self.searchResultData.removeAll()
-                self.roomTrackDataSpotify.append(track)
+                dict.setValue(track, forKey: "SPTTrack")
+                self.roomTrackData.append(dict)
                 
                 if self.noTracksToShow == true {
                     self.noTracksToShow = false
@@ -379,6 +396,14 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in self.handleAlert(alert, action: action)}))
             self.presentViewController(alert, animated: true, completion: nil)
         }
+        
+        self.socket.on("upvote track success") {data, ack in
+            var dict = data![0] as! NSDictionary
+            var response: AnyObject! = dict["data"]
+            
+            self.handleNewUpvote(response)
+        }
+        
     }
     
     func handleNewSession() {
@@ -407,9 +432,45 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         })
     }
     
+    func handleNewUpvote(response: AnyObject) {
+        self.track_uris.removeAll()
+        var temp_roomTrackData = [NSDictionary]()
+        for item in (response as! NSArray) {
+            let track = item as! NSDictionary
+            temp_roomTrackData.append(track)
+            self.track_uris.append(NSURL(string: track["track_id"] as! String)!)
+        }
+        self.roomTrackData = temp_roomTrackData
+        
+        // API IS LIMITED TO 50 - DO CONSECUTIVE CALLS
+        var auth = SPTAuth.defaultInstance()
+        SPTTrack.tracksWithURIs(self.track_uris, session: auth.session, callback: { (error: NSError!, searchResults: AnyObject!) -> Void in
+            
+            if error != nil {
+                println("*** Error retreiving tracklist: \(error)")
+                self.myActivityIndicatorView.stopActivity(true)
+                var alert = UIAlertController(title: "Connection Error", message: "Error retreiving tracklist.", preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in self.handleAlert(alert, action: action)}))
+                self.presentViewController(alert, animated: true, completion: nil)
+                return
+            }
+            
+            let all_tracks = searchResults as! NSArray
+            
+            for var i = 0; i < all_tracks.count; i++ {
+                let track = all_tracks[i] as! SPTTrack
+                self.roomTrackData[i].setValue(track, forKey: "SPTTrack")
+            }
+            
+            
+            self.replaceURIsAndContinuePlaying()
+            self.tableView.reloadData()
+        })
+    }
     
     @IBAction func pressedCloseButton() {
         self.isClosing = true
+        self.ls_stop()
         self.timeoutTimer.invalidate()
         self.tabBarC.hideRoomViewForDestroy()
     }
@@ -449,7 +510,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     
     @IBAction func pressedSearchButton() {
         self.customNavItem.leftBarButtonItems = nil
-        self.customNavItem.rightBarButtonItem = nil
+        self.customNavItem.rightBarButtonItems = nil
         var cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: self, action: "pressedCancelButton")
         self.customNavItem.rightBarButtonItem = cancelButton
         self.customNavItem.titleView = self.searchBar
@@ -467,7 +528,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         self.searchBar.text = nil
         self.customNavItem.hidesBackButton = false
         self.customNavItem.leftBarButtonItems = self.storedLeftBarButtons
-        self.customNavItem.rightBarButtonItem = self.storedRightBarButton
+        self.customNavItem.rightBarButtonItems = self.storedRightBarButtons
         self.customNavItem.titleView = nil
         
         self.searchBar(self.searchBar, textDidChange: "") // also calls table reload
@@ -486,15 +547,19 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     }
     
     @IBAction func pressedUpvoteButton(sender: UIButton) {
-        sender.setBackgroundImage(UIImage(named: "Upvote-Background-Gold"), forState: UIControlState.Normal)
-        sender.userInteractionEnabled = false
-        
-        // TEMPORARY
-        let spotiroomsTrackInfo = self.roomTrackDataSpotirooms[sender.tag+1]
-        var upvotes = spotiroomsTrackInfo["upvotes"]!.stringValue.toInt()
-        spotiroomsTrackInfo.setValue(upvotes!+1, forKey: "upvotes")
-        self.tableView.reloadData()
+        let timeLeft = self.player.currentTrackDuration-self.player.currentPlaybackPosition
+        if timeLeft > 4 {
+            let trackInfo = self.roomTrackData[sender.tag+1]
+            let roomtrack_id = trackInfo["id"]!.stringValue.toInt()
+            println("*** Upvoting track ***")
+            self.socket.emit("upvote track", [
+                "session_id": self.userDefaults.stringForKey("session_token")!,
+                "room_id": self.room_info["room_id"].intValue,
+                "roomtrack_id": roomtrack_id!
+            ])
+        }
     }
+    
     
     func loadResults(searchTerm: String!) {
         var auth = SPTAuth.defaultInstance()
@@ -619,9 +684,8 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     }
     
     func endOfTrack() {
-        self.roomTrackDataSpotify.removeAtIndex(0)
-        self.roomTrackDataSpotirooms.removeAtIndex(0)
-        if self.roomTrackDataSpotirooms.count == 0 {
+        self.roomTrackData.removeAtIndex(0)
+        if self.roomTrackData.count == 0 {
             self.noTracksToShow = true
         }
         if self.searchActive == false {
@@ -631,8 +695,8 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     
     func getURIsAndStartPlaying() {
         self.track_uris.removeAll()
-        for item in self.roomTrackDataSpotify {
-            let track = item as! SPTPartialTrack
+        for item in self.roomTrackData {
+            let track = item["SPTTrack"] as! SPTPartialTrack
             self.track_uris.append(track.playableUri)
         }
         self.startPlaying()
@@ -640,11 +704,6 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     
     func replaceURIsAndContinuePlaying() {
         self.isReplacingURIs = true
-        self.track_uris.removeAll()
-        for item in self.roomTrackDataSpotify {
-            let track = item as! SPTPartialTrack
-            self.track_uris.append(track.playableUri)
-        }
         self.player.replaceURIs(self.track_uris, withCurrentTrack: 0, callback: { (error: NSError!) -> Void in
             self.isReplacingURIs = false
             if error != nil {
@@ -677,7 +736,8 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         if self.noTracksToShow == false {
             self.starredButton.hidden = false
             
-            let partialTrack = self.roomTrackDataSpotify[0] as! SPTTrack
+            let track = self.roomTrackData[0]
+            let partialTrack = track["SPTTrack"] as! SPTTrack
             
             var artistName = ""
             for artist in partialTrack.artists {
@@ -711,7 +771,9 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                             })
                             if self.isPlaying == true {
                                 MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
-                                    MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: image)
+                                    MPMediaItemPropertyArtist: self.artistField.text!,
+                                    MPMediaItemPropertyTitle: self.titleField.text!,
+                                    MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.artworkView.image)
                                 ]
                             }
                         }
@@ -740,7 +802,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             count = self.searchResultData.count
         }
         else if self.noTracksToShow == false {
-            count = self.roomTrackDataSpotify.count == 1 ? self.roomTrackDataSpotify.count : self.roomTrackDataSpotify.count-1
+            count = self.roomTrackData.count == 1 ? self.roomTrackData.count : self.roomTrackData.count-1
         }
         return count
     }
@@ -750,7 +812,6 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
         // IN SEARCH
         if self.searchActive {
             // IN SEARCH WITH RESULTS TO SHOW
@@ -846,7 +907,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             }
         }
         // IN ROOM TRACKLIST BUT EITHER ONLY 1 TRACK OR NO TRACKS TO SHOW
-        else if self.noTracksToShow == true || self.roomTrackDataSpotify.count == 1 {
+        else if self.noTracksToShow == true || self.roomTrackData.count == 1 {
             var cell = tableView.dequeueReusableCellWithIdentifier("cell") as? UITableViewCell
             
             if cell == nil {
@@ -856,11 +917,12 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             cell!.textLabel?.text = "No tracks in playlist."
             cell!.detailTextLabel?.text = ""
             
-            cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            //cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            cell!.backgroundColor = UIColor.clearColor()
             cell!.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 16)
             cell!.textLabel?.textColor = UIColor.lightGrayColor()
             cell!.detailTextLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 13)
-            cell!.detailTextLabel?.textColor = UIColor.lightGrayColor()
+            cell!.detailTextLabel?.textColor = UIColor.groupTableViewBackgroundColor()
             cell!.selectionStyle = UITableViewCellSelectionStyle.None
             
             self.progressView.setProgress(0, animated: false)
@@ -882,7 +944,8 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                 activityIndicator.removeFromSuperview()
             }
             
-            let partialTrack = self.roomTrackDataSpotify[indexPath.row+1] as! SPTTrack
+            let track = self.roomTrackData[indexPath.row+1]
+            let partialTrack = track["SPTTrack"] as! SPTTrack
             
             var artistName = ""
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
@@ -929,15 +992,28 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             cell!.artworkView.layer.shadowRadius = 2.0
             cell!.upvoteButton.tag = indexPath.row
             cell!.upvoteButton.addTarget(self, action: "pressedUpvoteButton:", forControlEvents: UIControlEvents.TouchUpInside)
-            let spotiroomsTrackInfo = self.roomTrackDataSpotirooms[indexPath.row+1]
+            let spotiroomsTrackInfo = self.roomTrackData[indexPath.row+1]
             cell!.upvoteButton.setTitle(spotiroomsTrackInfo["upvotes"]!.stringValue, forState: UIControlState.Normal)
             
-            cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            if indexPath.row == 0 {
+                cell!.upvoteButton.setBackgroundImage(UIImage(named: "Upvote-Background-Blue"), forState: UIControlState.Normal)
+                cell!.upvoteButton.userInteractionEnabled = false
+            }
+            else if spotiroomsTrackInfo["has_upvoted"]!.intValue == 1 {
+                cell!.upvoteButton.setBackgroundImage(UIImage(named: "Upvote-Background-Gold"), forState: UIControlState.Normal)
+                cell!.upvoteButton.userInteractionEnabled = false
+            }
+            else {
+                cell!.upvoteButton.setBackgroundImage(UIImage(named: "Upvote-Background"), forState: UIControlState.Normal)
+                cell!.upvoteButton.userInteractionEnabled = true
+            }
+            
+            //cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            cell!.backgroundColor = UIColor.clearColor()
             cell!.selectionStyle = UITableViewCellSelectionStyle.None
             
             return cell!
         }
-
         
     }
     
@@ -968,7 +1044,7 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             
             // Temp fix to prevent issues with replacingURIsPlaylist with spotify in final seconds of last song
             let timeLeft = self.player.currentTrackDuration-self.player.currentPlaybackPosition
-            if self.roomTrackDataSpotirooms.count == 1 && (timeLeft < 5) {
+            if self.roomTrackData.count == 1 && (timeLeft < 5) {
                 let delay = (timeLeft+1) * Double(NSEC_PER_SEC)
                 let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
                 dispatch_after(time, dispatch_get_main_queue()) {
@@ -1016,9 +1092,6 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         
         if count(searchTerm) > 0 {
             if self.searchActive == false {
-                var largerFrame = self.view.frame
-                largerFrame.size.height += 90
-                self.view.frame = largerFrame
                 self.slideUpForResults()
             }
             self.searchActive = true
@@ -1027,9 +1100,6 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         }
         else if self.autoReturningFromSearch == true {
             if self.searchActive == true {
-                var smallerFrame = self.view.frame
-                smallerFrame.size.height -= 90
-                self.view.frame = smallerFrame
                 self.slideDownForTracklist()
             }
             self.didPrevHaveResults = false
@@ -1039,9 +1109,6 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         }
         else {
             if self.searchActive == true {
-                var smallerFrame = self.view.frame
-                smallerFrame.size.height -= 90
-                self.view.frame = smallerFrame
                 self.slideDownForTracklist()
             }
             self.didPrevHaveResults = false
@@ -1061,7 +1128,11 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             self.view.transform = CGAffineTransformMakeTranslation(0, -88)
             self.behindStatusBarView.transform = CGAffineTransformMakeTranslation(0, 88)
             self.customNavBar.transform = CGAffineTransformMakeTranslation(0, 88)
-        }, completion: nil)
+            }, completion: { _ in
+                var largerFrame = self.view.frame
+                largerFrame.size.height += 88
+                self.view.frame = largerFrame
+        })
     }
     
     func slideDownForTracklist() {
@@ -1069,7 +1140,11 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             self.view.transform = CGAffineTransformMakeTranslation(0, 0)
             self.behindStatusBarView.transform = CGAffineTransformMakeTranslation(0, 0)
             self.customNavBar.transform = CGAffineTransformMakeTranslation(0, 0)
-        }, completion: nil)
+            }, completion: { _ in
+                var smallerFrame = self.view.frame
+                smallerFrame.size.height -= 88
+                self.view.frame = smallerFrame
+        })
     }
     
     ////////////////////////////////////////////////////////////
@@ -1098,10 +1173,12 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
                 MPMediaItemPropertyTitle: self.titleField.text!,
                 MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.artworkView.image)
             ]
+            self.ls_syncButton.enabled = true
         }
         else {
             self.stopProgressBarUpdate()
             MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nil
+            self.ls_syncButton.enabled = false
         }
     }
     
@@ -1114,6 +1191,12 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
     }
     
     func audioStreaming(audioStreaming: SPTAudioStreamingController!, didStartPlayingTrack trackUri: NSURL!) {
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+            MPMediaItemPropertyArtist: self.artistField.text!,
+            MPMediaItemPropertyTitle: self.titleField.text!,
+            MPMediaItemPropertyArtwork: MPMediaItemArtwork(image: self.artworkView.image)
+        ]
+        self.ls_currentTrackStartTime = NSDate().timeIntervalSince1970
         var timeWeShouldBeAt: NSTimeInterval = NSDate().timeIntervalSince1970 - self.currentTrackStartTime
         if timeWeShouldBeAt < self.player.currentPlaybackPosition-2
             || (timeWeShouldBeAt > self.player.currentPlaybackPosition+2 && timeWeShouldBeAt < self.player.currentPlaybackPosition+5) {
@@ -1121,6 +1204,8 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
             self.player.seekToOffset(timeWeShouldBeAt, callback: nil)
             println("*** Audio out of sync - resyncing ***")
         }
+        // Attempt Local sync
+        self.ls_tryToSync()
     }
     
     func audioStreaming(audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: NSURL!) {
@@ -1135,6 +1220,106 @@ class RoomVC: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlay
         var alert = UIAlertController(title: "Connection Error", message: "Lost connection to Spotify.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in self.handleAlert(alert, action: action)}))
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    
+    //MARK: MCBroadcast delegate
+    
+    func ls_tryToSync() {
+        let delay = 2 * Double(NSEC_PER_SEC)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue()) {
+            if let ls_Manager = self.ls_Manager {
+                if self.ls_connected == true && self.ls_DeviceIsSlave == false {
+                    
+                    self.ls_Message.text = "\(self.appDelegate.nc.networkTime.timeIntervalSince1970+(self.player.currentTrackDuration-self.player.currentPlaybackPosition))"
+                    //self.ls_Message.text = self.ls_currentTrackStartTime.description
+                    self.ls_Manager!.sendObject(self.ls_Message, toBroadcasters: nil)
+                }
+            }
+        }
+    }
+    
+    func ls_stop() {
+        if let ls_Manager = self.ls_Manager {
+            ls_Manager.stopBrowsing()
+            ls_Manager.stopAdvertising()
+        }
+    }
+    
+    func pressedSyncButton() {
+        self.ls_syncButton.enabled = false
+        //var nt: NSTimeInterval = appDelegate.nc.networkTime.timeIntervalSince1970
+        //self.ls_timeSyncWasPressed = NSDate().timeIntervalSince1970
+        self.ls_Manager = MCBroadcast(displayName: UIDevice.currentDevice().name, delegate: self)
+        self.ls_Manager!.startBrowsing()
+        self.ls_Manager!.startAdvertising()
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, broadcaster: MCBroadcaster, didChangeState state: MCBroadcastSessionState) {
+        
+        var status: String
+        
+        switch state {
+        case .Connected:
+            self.ls_syncButton = UIBarButtonItem(image: UIImage(named: "Sync-Button"), style: UIBarButtonItemStyle.Plain, target: self, action: "ls_tryToSync")
+            self.ls_connected = true
+            status = "Connected to \(broadcaster.displayName)"
+            self.ls_tryToSync()
+            break
+            
+        case .Connecting:
+            self.ls_connected = false
+            status = "Connecting to \(broadcaster.displayName)"
+            break
+            
+        case .NotConnected:
+            self.ls_syncButton.enabled = true
+            self.ls_syncButton = UIBarButtonItem(image: UIImage(named: "Sync-Button"), style: UIBarButtonItemStyle.Plain, target: self, action: "pressedSyncButton")
+            self.ls_connected = false
+            self.ls_DeviceIsSlave = false
+            status = "Not connected to \(broadcaster.displayName)"
+            break
+        }
+        
+        NSOperationQueue.mainQueue().addOperationWithBlock { () -> Void in
+            println(status)
+        }
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, didReceiveObject object: MCObject?, fromBroadcaster broadcaster: MCBroadcaster) {
+        //var messageArr = split(object?.text as! String) {$0 == ","}
+        //var theirTime: NSTimeInterval = (messageArr[0] as NSString).doubleValue
+        //var theirTrackPosition: NSTimeInterval = (messageArr[1] as NSString).doubleValue
+        //var latency = self.appDelegate.nc.networkTime.timeIntervalSince1970 - theirTime
+        //var myTrackPositionAtTheirTime = self.player.currentPlaybackPosition - latency
+        //var difference = myTrackPositionAtTheirTime - theirTrackPosition
+        var theirEndTime: NSTimeInterval = ((object?.text as! String) as NSString).doubleValue
+        //var goToTime: NSTimeInterval = receivedStartTime - self.ls_currentTrackStartTime
+        var timeRemaining = theirEndTime - self.appDelegate.nc.networkTime.timeIntervalSince1970
+        self.player.seekToOffset(self.player.currentTrackDuration-timeRemaining+0.2, callback: nil)
+        println("*** SYNCING ***")
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, foundBroadcaster broadcaster: MCBroadcaster) {
+        
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, lostBroadcaster broadcaster: MCBroadcaster) {
+        self.ls_stop()
+        self.ls_syncButton.enabled = true
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, didReceiveInvitationFromBroadcaster broadcaster: MCBroadcaster) {
+        println("Received invitation from \(broadcaster.displayName)")
+        self.ls_DeviceIsSlave = true
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, didAcceptInvitationFromBroadcaster broadcaster: MCBroadcaster) {
+        println("Accepted invitation from \(broadcaster.displayName)")
+    }
+    
+    func mcBroadcast(manager: MCBroadcast, didEncounterError error: NSError) {
     }
     
 }

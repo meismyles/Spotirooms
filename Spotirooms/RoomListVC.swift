@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import DTIActivityIndicator
+import CryptoSwift
 
 class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -33,7 +34,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        //self.tableView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        self.tableView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
         
         // Do any additional setup after loading the view, typically from a nib.
         self.refreshControl = UIRefreshControl()
@@ -82,7 +84,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
         if let selectedIndexPath: NSIndexPath = self.selectedIndexPath {
             var cell = tableView.cellForRowAtIndexPath(selectedIndexPath)
-            cell!.contentView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            //cell!.contentView.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+            cell!.contentView.backgroundColor = UIColor.clearColor()
             if let coverView = cell!.viewWithTag(1) {
                 coverView.removeFromSuperview()
             }
@@ -172,6 +175,46 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    func checkPass(room_info: JSON, pass: String!, cell: UITableViewCell, indexPath: NSIndexPath) {
+        let hashedPass = pass.sha256()!
+        
+        let parameters = [
+            "room_id": room_info["room_id"].stringValue,
+            "pass": hashedPass
+        ]
+        Alamofire.request(.POST, "\(Constants.serverURL)/api/check_pass", parameters: parameters, encoding: .JSON)
+            .authenticate(user: self.userDefaults.stringForKey("session_token")!, password: "")
+            .responseJSON {(request, response, json, error) in
+                // Network Error
+                if(error != nil) {
+                    NSLog("***** ERROR: \(error)")
+                    println("***** REQUEST: \(request)")
+                    println("***** RESPONSE: \(response)")
+                    var alert = UIAlertController(title: "Error", message: "Could not connect to server.", preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                else {
+                    var json = JSON(json!)
+                    // Server Error
+                    if let error = json["error"].string {
+                        var alert = UIAlertController(title: "Error", message: error, preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    }
+                    else {
+                        let success = json["data"].intValue
+                        if success == 1 {
+                            cell.contentView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.05)
+                            self.selectedRoom_info = self.rooms[indexPath.row]
+                            self.tabBarC.addRoomView(self.selectedRoom_info!, fromView: 0)
+                        }
+                    }
+                }
+        }
+
+    }
+    
     // UITableViewDataSource methods
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -216,7 +259,8 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             cell!.detailTextLabel?.text = "Why not create one?"
         }
         
-        cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        //cell!.backgroundColor = UIColor(red: 0.162, green: 0.173, blue: 0.188, alpha: 1.0)
+        cell!.backgroundColor = UIColor.clearColor()
         cell!.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 16)
         cell!.textLabel?.textColor = UIColor.whiteColor()
         cell!.detailTextLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 13)
@@ -234,9 +278,31 @@ class RoomListVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         if self.noRoomsToShow == false {
             let room_info = self.rooms[indexPath.row]
             if self.selectedRoom_info == nil || self.selectedRoom_info!["room_id"].intValue != room_info["room_id"].intValue {
-                cell!.contentView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.05)
-                self.selectedRoom_info = self.rooms[indexPath.row]
-                self.tabBarC.addRoomView(self.selectedRoom_info!)
+                if room_info["private"].intValue == 0 {
+                    cell!.contentView.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.05)
+                    self.selectedRoom_info = self.rooms[indexPath.row]
+                    self.tabBarC.addRoomView(self.selectedRoom_info!, fromView: 0)
+                }
+                else {
+                    //1. Create the alert controller.
+                    var alert = UIAlertController(title: "Private Room", message: "Please enter the room password.", preferredStyle: .Alert)
+                    
+                    //2. Add the text field. You can configure it however you need.
+                    alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+                        textField.placeholder = "Password"
+                        textField.secureTextEntry = true
+                    })
+                    
+                    //3. Grab the value from the text field, and print it when the user clicks OK.
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { (action) -> Void in
+                        let textField = alert.textFields![0] as! UITextField
+                        self.checkPass(room_info, pass: textField.text, cell: cell!, indexPath: indexPath)
+                    }))
+                    
+                    // 4. Present the alert.
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
             }
             else {
                 var alert = UIAlertController(title: "Sorry", message: "You are already a member of this room.", preferredStyle: UIAlertControllerStyle.Alert)

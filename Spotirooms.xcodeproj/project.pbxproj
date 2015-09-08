@@ -18,8 +18,32 @@
 		0010EDF91B96226E00399043 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0010EDF81B96226E00399043 /* ImageIO.framework */; };
 		0010EE061B965A8300399043 /* TrackListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0010EE051B965A8300399043 /* TrackListCell.swift */; };
 		0010EE081B96746C00399043 /* No-Tracks-Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0010EE071B96746C00399043 /* No-Tracks-Placeholder.png */; };
+		001611F41B9CACBB00D657E2 /* Upvote-Background-Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 001611F31B9CACBB00D657E2 /* Upvote-Background-Blue.png */; };
+		0016120C1B9D042A00D657E2 /* MCBroadcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016120A1B9D042A00D657E2 /* MCBroadcast.swift */; };
+		0016120D1B9D042A00D657E2 /* MCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0016120B1B9D042A00D657E2 /* MCObject.swift */; };
+		0016120F1B9D1CBC00D657E2 /* Sync-Button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0016120E1B9D1CBC00D657E2 /* Sync-Button.png */; };
+		0016128E1B9D3B4C00D657E2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0016126D1B9D3B4C00D657E2 /* .gitignore */; };
+		001612901B9D3B4C00D657E2 /* ntp.hosts in Resources */ = {isa = PBXBuildFile; fileRef = 001612701B9D3B4C00D657E2 /* ntp.hosts */; };
+		001612911B9D3B4C00D657E2 /* ntpAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 001612721B9D3B4C00D657E2 /* ntpAppDelegate.m */; };
+		001612921B9D3B4C00D657E2 /* ntpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 001612741B9D3B4C00D657E2 /* ntpViewController.m */; };
+		001612931B9D3B4C00D657E2 /* NetAssociation.m in Sources */ = {isa = PBXBuildFile; fileRef = 001612781B9D3B4C00D657E2 /* NetAssociation.m */; };
+		001612941B9D3B4C00D657E2 /* NetworkClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0016127A1B9D3B4C00D657E2 /* NetworkClock.m */; };
+		001612951B9D3B4C00D657E2 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = 0016127B1B9D3B4C00D657E2 /* Notes */; };
+		001612961B9D3B4C00D657E2 /* NSDate+NetworkClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0016127D1B9D3B4C00D657E2 /* NSDate+NetworkClock.m */; };
+		001612971B9D3B4C00D657E2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 001612801B9D3B4C00D657E2 /* InfoPlist.strings */; };
+		001612981B9D3B4C00D657E2 /* ntpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 001612821B9D3B4C00D657E2 /* ntpViewController.xib */; };
+		001612991B9D3B4C00D657E2 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 001612841B9D3B4C00D657E2 /* Storyboard.storyboard */; };
+		0016129A1B9D3B4C00D657E2 /* ios-ntp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 001612861B9D3B4C00D657E2 /* ios-ntp-Info.plist */; };
+		0016129B1B9D3B4C00D657E2 /* ntp-app-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 001612871B9D3B4C00D657E2 /* ntp-app-Info.plist */; };
+		0016129C1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 0016128D1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.m */; };
+		001612AB1B9DDBE500D657E2 /* App-Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 001612A91B9DDBE500D657E2 /* App-Icon.png */; };
+		001612AC1B9DDBE500D657E2 /* LaunchPage-Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 001612AA1B9DDBE500D657E2 /* LaunchPage-Icon.png */; };
+		001612AF1B9DE05E00D657E2 /* App-Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = 001612AD1B9DE05E00D657E2 /* App-Icon-152.png */; };
+		001612B01B9DE05E00D657E2 /* App-Icon-180.png in Resources */ = {isa = PBXBuildFile; fileRef = 001612AE1B9DE05E00D657E2 /* App-Icon-180.png */; };
+		001612B41B9DE12C00D657E2 /* App-Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 001612B31B9DE12C00D657E2 /* App-Icon-120.png */; };
+		001612B81B9E0C2D00D657E2 /* Login-Wallpaper.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 001612B71B9E0C2D00D657E2 /* Login-Wallpaper.jpg */; };
 		002A3DA51B795761006C478D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DA41B795761006C478D /* AppDelegate.swift */; };
-		002A3DA91B795761006C478D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DA81B795761006C478D /* SecondViewController.swift */; };
+		002A3DA91B795761006C478D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DA81B795761006C478D /* ProfileVC.swift */; };
 		002A3DAC1B795761006C478D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 002A3DAA1B795761006C478D /* Main.storyboard */; };
 		002A3DAE1B795761006C478D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 002A3DAD1B795761006C478D /* Images.xcassets */; };
 		002A3DB11B795761006C478D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 002A3DAF1B795761006C478D /* LaunchScreen.xib */; };
@@ -28,6 +52,11 @@
 		002A3DCA1B795D7D006C478D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DC91B795D7D006C478D /* AVFoundation.framework */; };
 		002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */; };
 		002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002A3DCD1B79637B006C478D /* LoginVC.swift */; };
+		004145BB1B9E663700E5A045 /* Room-Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 004145B91B9E663700E5A045 /* Room-Background.jpg */; };
+		004145BC1B9E663700E5A045 /* TableView-Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 004145BA1B9E663700E5A045 /* TableView-Background.jpg */; };
+		004145C91B9E674B00E5A045 /* RoomList-Background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 004145C81B9E674B00E5A045 /* RoomList-Background.jpg */; };
+		004145D41B9E703E00E5A045 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 004145D11B9E702100E5A045 /* CryptoSwift.framework */; };
+		004145D51B9E703E00E5A045 /* CryptoSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 004145D11B9E702100E5A045 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0055AB9B1B925FF600A7ACB4 /* RoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */; };
 		006734B31B99067B000162D4 /* Room-Maximise.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734B21B99067B000162D4 /* Room-Maximise.png */; };
 		006734C11B9A0FA3000162D4 /* Starred.png in Resources */ = {isa = PBXBuildFile; fileRef = 006734BF1B9A0FA3000162D4 /* Starred.png */; };
@@ -126,6 +155,27 @@
 			remoteGlobalIDString = 002A3D9E1B795761006C478D;
 			remoteInfo = Spotirooms;
 		};
+		004145D01B9E702100E5A045 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004145CA1B9E702100E5A045 /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 754BE45519693E190098E6F3;
+			remoteInfo = CryptoSwift;
+		};
+		004145D21B9E702100E5A045 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004145CA1B9E702100E5A045 /* CryptoSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 754BE46019693E190098E6F3;
+			remoteInfo = CryptoSwiftTests;
+		};
+		004145D61B9E703E00E5A045 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 004145CA1B9E702100E5A045 /* CryptoSwift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 754BE45419693E190098E6F3;
+			remoteInfo = CryptoSwift;
+		};
 		00893FC91B88A0E800A32308 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00893FC21B88A0E800A32308 /* Alamofire.xcodeproj */;
@@ -208,6 +258,7 @@
 				0010EDC31B93905F00399043 /* DTIActivityIndicator.framework in Embed Frameworks */,
 				00893FE51B88A15900A32308 /* SwiftyJSON.framework in Embed Frameworks */,
 				00893FE11B88A15900A32308 /* Alamofire.framework in Embed Frameworks */,
+				004145D51B9E703E00E5A045 /* CryptoSwift.framework in Embed Frameworks */,
 				0010EDF11B961F1E00399043 /* WebImage.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -225,10 +276,43 @@
 		0010EDF81B96226E00399043 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0010EE051B965A8300399043 /* TrackListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackListCell.swift; path = "TableView Cells/TrackListCell.swift"; sourceTree = "<group>"; };
 		0010EE071B96746C00399043 /* No-Tracks-Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "No-Tracks-Placeholder.png"; sourceTree = "<group>"; };
+		001611F31B9CACBB00D657E2 /* Upvote-Background-Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Upvote-Background-Blue.png"; sourceTree = "<group>"; };
+		0016120A1B9D042A00D657E2 /* MCBroadcast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MCBroadcast.swift; sourceTree = "<group>"; };
+		0016120B1B9D042A00D657E2 /* MCObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MCObject.swift; sourceTree = "<group>"; };
+		0016120E1B9D1CBC00D657E2 /* Sync-Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sync-Button.png"; sourceTree = "<group>"; };
+		0016126D1B9D3B4C00D657E2 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		0016126F1B9D3B4C00D657E2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		001612701B9D3B4C00D657E2 /* ntp.hosts */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ntp.hosts; sourceTree = "<group>"; };
+		001612711B9D3B4C00D657E2 /* ntpAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntpAppDelegate.h; sourceTree = "<group>"; };
+		001612721B9D3B4C00D657E2 /* ntpAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ntpAppDelegate.m; sourceTree = "<group>"; };
+		001612731B9D3B4C00D657E2 /* ntpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ntpViewController.h; sourceTree = "<group>"; };
+		001612741B9D3B4C00D657E2 /* ntpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ntpViewController.m; sourceTree = "<group>"; };
+		001612761B9D3B4C00D657E2 /* ios-ntp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ios-ntp.h"; sourceTree = "<group>"; };
+		001612771B9D3B4C00D657E2 /* NetAssociation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetAssociation.h; sourceTree = "<group>"; };
+		001612781B9D3B4C00D657E2 /* NetAssociation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetAssociation.m; sourceTree = "<group>"; };
+		001612791B9D3B4C00D657E2 /* NetworkClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkClock.h; sourceTree = "<group>"; };
+		0016127A1B9D3B4C00D657E2 /* NetworkClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkClock.m; sourceTree = "<group>"; };
+		0016127B1B9D3B4C00D657E2 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
+		0016127C1B9D3B4C00D657E2 /* NSDate+NetworkClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NetworkClock.h"; sourceTree = "<group>"; };
+		0016127D1B9D3B4C00D657E2 /* NSDate+NetworkClock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NetworkClock.m"; sourceTree = "<group>"; };
+		0016127E1B9D3B4C00D657E2 /* ntp-log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ntp-log.h"; sourceTree = "<group>"; };
+		001612811B9D3B4C00D657E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		001612831B9D3B4C00D657E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ntpViewController.xib; sourceTree = "<group>"; };
+		001612851B9D3B4C00D657E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Storyboard.storyboard; sourceTree = "<group>"; };
+		001612861B9D3B4C00D657E2 /* ios-ntp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ios-ntp-Info.plist"; sourceTree = "<group>"; };
+		001612871B9D3B4C00D657E2 /* ntp-app-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ntp-app-Info.plist"; sourceTree = "<group>"; };
+		0016128C1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		0016128D1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		001612A91B9DDBE500D657E2 /* App-Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "App-Icon.png"; sourceTree = "<group>"; };
+		001612AA1B9DDBE500D657E2 /* LaunchPage-Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchPage-Icon.png"; sourceTree = "<group>"; };
+		001612AD1B9DE05E00D657E2 /* App-Icon-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "App-Icon-152.png"; sourceTree = "<group>"; };
+		001612AE1B9DE05E00D657E2 /* App-Icon-180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "App-Icon-180.png"; sourceTree = "<group>"; };
+		001612B31B9DE12C00D657E2 /* App-Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "App-Icon-120.png"; sourceTree = "<group>"; };
+		001612B71B9E0C2D00D657E2 /* Login-Wallpaper.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Login-Wallpaper.jpg"; sourceTree = "<group>"; };
 		002A3D9F1B795761006C478D /* Spotirooms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotirooms.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		002A3DA31B795761006C478D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		002A3DA41B795761006C478D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		002A3DA81B795761006C478D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		002A3DA81B795761006C478D /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		002A3DAB1B795761006C478D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		002A3DAD1B795761006C478D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		002A3DB01B795761006C478D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -240,6 +324,10 @@
 		002A3DCB1B795DBA006C478D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		002A3DCD1B79637B006C478D /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		002A3DD01B796518006C478D /* Spotirooms-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Spotirooms-Bridging-Header.h"; sourceTree = "<group>"; };
+		004145B91B9E663700E5A045 /* Room-Background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Room-Background.jpg"; sourceTree = "<group>"; };
+		004145BA1B9E663700E5A045 /* TableView-Background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "TableView-Background.jpg"; sourceTree = "<group>"; };
+		004145C81B9E674B00E5A045 /* RoomList-Background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "RoomList-Background.jpg"; sourceTree = "<group>"; };
+		004145CA1B9E702100E5A045 /* CryptoSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CryptoSwift.xcodeproj; path = CryptoSwift/CryptoSwift.xcodeproj; sourceTree = "<group>"; };
 		0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomVC.swift; sourceTree = "<group>"; };
 		006734B21B99067B000162D4 /* Room-Maximise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Room-Maximise.png"; sourceTree = "<group>"; };
 		006734BF1B9A0FA3000162D4 /* Starred.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Starred.png; sourceTree = "<group>"; };
@@ -280,6 +368,7 @@
 				007B9C211B97338000C17EA3 /* MediaPlayer.framework in Frameworks */,
 				0010EDF91B96226E00399043 /* ImageIO.framework in Frameworks */,
 				002A3DCC1B795DBA006C478D /* SystemConfiguration.framework in Frameworks */,
+				004145D41B9E703E00E5A045 /* CryptoSwift.framework in Frameworks */,
 				002A3DCA1B795D7D006C478D /* AVFoundation.framework in Frameworks */,
 				002A3DC81B795CB7006C478D /* Spotify.framework in Frameworks */,
 				0010EDC21B93905F00399043 /* DTIActivityIndicator.framework in Frameworks */,
@@ -328,6 +417,17 @@
 		0010EDD61B94F47500399043 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				004145C81B9E674B00E5A045 /* RoomList-Background.jpg */,
+				004145B91B9E663700E5A045 /* Room-Background.jpg */,
+				004145BA1B9E663700E5A045 /* TableView-Background.jpg */,
+				001612B71B9E0C2D00D657E2 /* Login-Wallpaper.jpg */,
+				001612B31B9DE12C00D657E2 /* App-Icon-120.png */,
+				001612AD1B9DE05E00D657E2 /* App-Icon-152.png */,
+				001612AE1B9DE05E00D657E2 /* App-Icon-180.png */,
+				001612A91B9DDBE500D657E2 /* App-Icon.png */,
+				001612AA1B9DDBE500D657E2 /* LaunchPage-Icon.png */,
+				0016120E1B9D1CBC00D657E2 /* Sync-Button.png */,
+				001611F31B9CACBB00D657E2 /* Upvote-Background-Blue.png */,
 				006734CB1B9A4FF0000162D4 /* Upvote-Background-Gold.png */,
 				006734C91B9A276A000162D4 /* Upvote-Background.png */,
 				006734C31B9A193E000162D4 /* Gold-Upvote.png */,
@@ -380,6 +480,79 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		001612091B9D042A00D657E2 /* MCBroadcast */ = {
+			isa = PBXGroup;
+			children = (
+				0016120A1B9D042A00D657E2 /* MCBroadcast.swift */,
+				0016120B1B9D042A00D657E2 /* MCObject.swift */,
+			);
+			name = MCBroadcast;
+			path = Frameworks/MCBroadcast;
+			sourceTree = "<group>";
+		};
+		0016126C1B9D3B4C00D657E2 /* ios-ntp */ = {
+			isa = PBXGroup;
+			children = (
+				0016126D1B9D3B4C00D657E2 /* .gitignore */,
+				0016126E1B9D3B4C00D657E2 /* ios-ntp-app */,
+				001612751B9D3B4C00D657E2 /* ios-ntp-lib */,
+				0016127F1B9D3B4C00D657E2 /* ios-ntp-rez */,
+				0016128B1B9D3B4C00D657E2 /* network-udp */,
+			);
+			name = "ios-ntp";
+			path = "Frameworks/ios-ntp";
+			sourceTree = "<group>";
+		};
+		0016126E1B9D3B4C00D657E2 /* ios-ntp-app */ = {
+			isa = PBXGroup;
+			children = (
+				0016126F1B9D3B4C00D657E2 /* main.m */,
+				001612701B9D3B4C00D657E2 /* ntp.hosts */,
+				001612711B9D3B4C00D657E2 /* ntpAppDelegate.h */,
+				001612721B9D3B4C00D657E2 /* ntpAppDelegate.m */,
+				001612731B9D3B4C00D657E2 /* ntpViewController.h */,
+				001612741B9D3B4C00D657E2 /* ntpViewController.m */,
+			);
+			path = "ios-ntp-app";
+			sourceTree = "<group>";
+		};
+		001612751B9D3B4C00D657E2 /* ios-ntp-lib */ = {
+			isa = PBXGroup;
+			children = (
+				001612761B9D3B4C00D657E2 /* ios-ntp.h */,
+				001612771B9D3B4C00D657E2 /* NetAssociation.h */,
+				001612781B9D3B4C00D657E2 /* NetAssociation.m */,
+				001612791B9D3B4C00D657E2 /* NetworkClock.h */,
+				0016127A1B9D3B4C00D657E2 /* NetworkClock.m */,
+				0016127B1B9D3B4C00D657E2 /* Notes */,
+				0016127C1B9D3B4C00D657E2 /* NSDate+NetworkClock.h */,
+				0016127D1B9D3B4C00D657E2 /* NSDate+NetworkClock.m */,
+				0016127E1B9D3B4C00D657E2 /* ntp-log.h */,
+			);
+			path = "ios-ntp-lib";
+			sourceTree = "<group>";
+		};
+		0016127F1B9D3B4C00D657E2 /* ios-ntp-rez */ = {
+			isa = PBXGroup;
+			children = (
+				001612801B9D3B4C00D657E2 /* InfoPlist.strings */,
+				001612821B9D3B4C00D657E2 /* ntpViewController.xib */,
+				001612841B9D3B4C00D657E2 /* Storyboard.storyboard */,
+				001612861B9D3B4C00D657E2 /* ios-ntp-Info.plist */,
+				001612871B9D3B4C00D657E2 /* ntp-app-Info.plist */,
+			);
+			path = "ios-ntp-rez";
+			sourceTree = "<group>";
+		};
+		0016128B1B9D3B4C00D657E2 /* network-udp */ = {
+			isa = PBXGroup;
+			children = (
+				0016128C1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.h */,
+				0016128D1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.m */,
+			);
+			path = "network-udp";
+			sourceTree = "<group>";
+		};
 		002A3D961B795761006C478D = {
 			isa = PBXGroup;
 			children = (
@@ -391,6 +564,7 @@
 				00893FD11B88A14A00A32308 /* SwiftyJSON.xcodeproj */,
 				0010EDB91B93905600399043 /* DTIActivityIndicator.xcodeproj */,
 				0010EDE01B961F0900399043 /* SDWebImage.xcodeproj */,
+				004145CA1B9E702100E5A045 /* CryptoSwift.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -414,7 +588,7 @@
 				00893FE91B8BE69800A32308 /* NewRoomVC.swift */,
 				00893F911B889B0000A32308 /* RoomListVC.swift */,
 				0055AB9A1B925FF600A7ACB4 /* RoomVC.swift */,
-				002A3DA81B795761006C478D /* SecondViewController.swift */,
+				002A3DA81B795761006C478D /* ProfileVC.swift */,
 				0010EDD41B94DE6000399043 /* TableView Cells */,
 				0010EDD51B94F47500399043 /* Data */,
 				002A3DAD1B795761006C478D /* Images.xcassets */,
@@ -453,6 +627,8 @@
 		002A3DC61B795C78006C478D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0016126C1B9D3B4C00D657E2 /* ios-ntp */,
+				001612091B9D042A00D657E2 /* MCBroadcast */,
 				007B9C201B97338000C17EA3 /* MediaPlayer.framework */,
 				0010EDF81B96226E00399043 /* ImageIO.framework */,
 				008940351B90DD7F00A32308 /* SocketIOClientSwift */,
@@ -462,6 +638,15 @@
 			);
 			name = Frameworks;
 			path = Spotirooms;
+			sourceTree = "<group>";
+		};
+		004145CB1B9E702100E5A045 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				004145D11B9E702100E5A045 /* CryptoSwift.framework */,
+				004145D31B9E702100E5A045 /* CryptoSwiftTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		00893FC31B88A0E800A32308 /* Products */ = {
@@ -526,6 +711,7 @@
 				00893FE71B88A15900A32308 /* PBXTargetDependency */,
 				0010EDC51B93905F00399043 /* PBXTargetDependency */,
 				0010EDF31B961F1E00399043 /* PBXTargetDependency */,
+				004145D71B9E703E00E5A045 /* PBXTargetDependency */,
 			);
 			name = Spotirooms;
 			productName = Spotirooms;
@@ -591,6 +777,10 @@
 					ProjectRef = 00893FC21B88A0E800A32308 /* Alamofire.xcodeproj */;
 				},
 				{
+					ProductGroup = 004145CB1B9E702100E5A045 /* Products */;
+					ProjectRef = 004145CA1B9E702100E5A045 /* CryptoSwift.xcodeproj */;
+				},
+				{
 					ProductGroup = 0010EDBA1B93905600399043 /* Products */;
 					ProjectRef = 0010EDB91B93905600399043 /* DTIActivityIndicator.xcodeproj */;
 				},
@@ -652,6 +842,20 @@
 			fileType = wrapper.framework;
 			path = WebImage.framework;
 			remoteRef = 0010EDEE1B961F0900399043 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		004145D11B9E702100E5A045 /* CryptoSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CryptoSwift.framework;
+			remoteRef = 004145D01B9E702100E5A045 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		004145D31B9E702100E5A045 /* CryptoSwiftTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CryptoSwiftTests.xctest;
+			remoteRef = 004145D21B9E702100E5A045 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		00893FCA1B88A0E800A32308 /* Alamofire.framework */ = {
@@ -719,19 +923,38 @@
 			files = (
 				006734CC1B9A4FF0000162D4 /* Upvote-Background-Gold.png in Resources */,
 				0010EDDF1B95023A00399043 /* Artwork-Placeholder.png in Resources */,
+				004145BB1B9E663700E5A045 /* Room-Background.jpg in Resources */,
 				00928A081B98AD4D004E2787 /* Room-Dismiss.png in Resources */,
 				0010EE081B96746C00399043 /* No-Tracks-Placeholder.png in Resources */,
 				006734C11B9A0FA3000162D4 /* Starred.png in Resources */,
+				001612991B9D3B4C00D657E2 /* Storyboard.storyboard in Resources */,
+				001612981B9D3B4C00D657E2 /* ntpViewController.xib in Resources */,
 				006734C21B9A0FA3000162D4 /* Unstarred.png in Resources */,
+				0016120F1B9D1CBC00D657E2 /* Sync-Button.png in Resources */,
 				002A3DAC1B795761006C478D /* Main.storyboard in Resources */,
+				001612AB1B9DDBE500D657E2 /* App-Icon.png in Resources */,
 				002A3DB11B795761006C478D /* LaunchScreen.xib in Resources */,
+				001612AC1B9DDBE500D657E2 /* LaunchPage-Icon.png in Resources */,
+				001612B81B9E0C2D00D657E2 /* Login-Wallpaper.jpg in Resources */,
+				001612971B9D3B4C00D657E2 /* InfoPlist.strings in Resources */,
+				001611F41B9CACBB00D657E2 /* Upvote-Background-Blue.png in Resources */,
+				001612901B9D3B4C00D657E2 /* ntp.hosts in Resources */,
 				006734C71B9A193E000162D4 /* Upvote-Tick.png in Resources */,
+				004145BC1B9E663700E5A045 /* TableView-Background.jpg in Resources */,
+				001612951B9D3B4C00D657E2 /* Notes in Resources */,
+				0016128E1B9D3B4C00D657E2 /* .gitignore in Resources */,
 				006734CA1B9A276A000162D4 /* Upvote-Background.png in Resources */,
 				006734B31B99067B000162D4 /* Room-Maximise.png in Resources */,
 				006734C61B9A193E000162D4 /* Gold-Upvote.png in Resources */,
 				006734C81B9A193E000162D4 /* Upvote.png in Resources */,
+				0016129A1B9D3B4C00D657E2 /* ios-ntp-Info.plist in Resources */,
 				0010EDDC1B94F47500399043 /* discover.png in Resources */,
+				001612B41B9DE12C00D657E2 /* App-Icon-120.png in Resources */,
+				004145C91B9E674B00E5A045 /* RoomList-Background.jpg in Resources */,
+				0016129B1B9D3B4C00D657E2 /* ntp-app-Info.plist in Resources */,
 				0010EDDD1B94F47500399043 /* profile.png in Resources */,
+				001612AF1B9DE05E00D657E2 /* App-Icon-152.png in Resources */,
+				001612B01B9DE05E00D657E2 /* App-Icon-180.png in Resources */,
 				002A3DAE1B795761006C478D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -750,7 +973,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				002A3DA91B795761006C478D /* SecondViewController.swift in Sources */,
+				001612961B9D3B4C00D657E2 /* NSDate+NetworkClock.m in Sources */,
+				002A3DA91B795761006C478D /* ProfileVC.swift in Sources */,
 				002A3DA51B795761006C478D /* AppDelegate.swift in Sources */,
 				008940441B90DD7F00A32308 /* SocketAnyEvent.swift in Sources */,
 				0089404C1B90DD8000A32308 /* SocketParser.swift in Sources */,
@@ -760,9 +984,14 @@
 				0089404A1B90DD8000A32308 /* SocketLogger.swift in Sources */,
 				002A3DCE1B79637B006C478D /* LoginVC.swift in Sources */,
 				0010EDCC1B94DE5B00399043 /* SearchResultCell.swift in Sources */,
+				0016129C1B9D3B4C00D657E2 /* GCDAsyncUdpSocket.m in Sources */,
+				0016120D1B9D042A00D657E2 /* MCObject.swift in Sources */,
 				0089404D1B90DD8000A32308 /* SocketTypes.swift in Sources */,
 				008940471B90DD8000A32308 /* SocketEventHandler.swift in Sources */,
+				001612911B9D3B4C00D657E2 /* ntpAppDelegate.m in Sources */,
+				001612931B9D3B4C00D657E2 /* NetAssociation.m in Sources */,
 				0055AB9B1B925FF600A7ACB4 /* RoomVC.swift in Sources */,
+				001612941B9D3B4C00D657E2 /* NetworkClock.m in Sources */,
 				00893F921B889B0000A32308 /* RoomListVC.swift in Sources */,
 				00893FEA1B8BE69800A32308 /* NewRoomVC.swift in Sources */,
 				0089404E1B90DD8000A32308 /* SwiftRegex.swift in Sources */,
@@ -770,9 +999,11 @@
 				0089404F1B90DD8000A32308 /* WebSocket.swift in Sources */,
 				0089404B1B90DD8000A32308 /* SocketPacket.swift in Sources */,
 				008940481B90DD8000A32308 /* SocketFixUTF8.swift in Sources */,
+				001612921B9D3B4C00D657E2 /* ntpViewController.m in Sources */,
 				008940491B90DD8000A32308 /* SocketIOClient.swift in Sources */,
 				00893FEC1B8CD82D00A32308 /* Constants.swift in Sources */,
 				008940431B90DD7F00A32308 /* SocketAckManager.swift in Sources */,
+				0016120C1B9D042A00D657E2 /* MCBroadcast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -802,6 +1033,11 @@
 			target = 002A3D9E1B795761006C478D /* Spotirooms */;
 			targetProxy = 002A3DB71B795761006C478D /* PBXContainerItemProxy */;
 		};
+		004145D71B9E703E00E5A045 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CryptoSwift;
+			targetProxy = 004145D61B9E703E00E5A045 /* PBXContainerItemProxy */;
+		};
 		00893FE31B88A15900A32308 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Alamofire iOS";
@@ -815,6 +1051,30 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		001612801B9D3B4C00D657E2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				001612811B9D3B4C00D657E2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		001612821B9D3B4C00D657E2 /* ntpViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				001612831B9D3B4C00D657E2 /* en */,
+			);
+			name = ntpViewController.xib;
+			sourceTree = "<group>";
+		};
+		001612841B9D3B4C00D657E2 /* Storyboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				001612851B9D3B4C00D657E2 /* en */,
+			);
+			name = Storyboard.storyboard;
+			sourceTree = "<group>";
+		};
 		002A3DAA1B795761006C478D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
