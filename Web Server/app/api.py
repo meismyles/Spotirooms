@@ -492,15 +492,11 @@ def sync_play(*args):
             return False
 
         # Pass current track start time (unix timestamp)
-        sio.custom_emit('start playing success', {'start_time': active_room_startTimes[room_id]}, room=int(room_id)) # sets namespace manually inside custom_emit() it AHACK
+        sio.custom_emit('start playing success', {'start_time': active_room_startTimes[room_id]}, room=int(room_id))
         if room_id not in active_room_timers or repeat is True:
             active_room_timers[room_id] = True
             threading.Timer(active_track_duartions[room_id]+0.3, sync_play, [int(room_id), True]).start() # plus 0.3 seconds to account for processing/latency
         return True
-
-def stop_playing(room_id=None):
-    pass
-    # Call this when last person in room leaves. Pop the start time from the dict.
 
 ############################################################
 # Websocket Methods
@@ -582,24 +578,6 @@ def socket_disconnect():
     if RoomUser.query.filter_by(sid=request.sid).first() is not None:
         leave_room(request.sid)
     print "*** Client Disconnected ***"
-
-
-############################################################
-# TEMP METHODS
-############################################################
-
-@app.route('/api/logout', methods=['GET', 'POST'])
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('index'))
-
-@app.route('/api/users')
-@auth.login_required
-def users():
-    user = model.User.query.get(1)
-    return (jsonify({'username': user.username, 'fullname': user.fullname, 'last_seen': user.last_seen}))
-
 
 ############################################################
 # Error Handlers

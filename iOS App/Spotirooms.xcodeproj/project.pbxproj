@@ -745,12 +745,13 @@
 		002A3D971B795761006C478D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Myles Ringle";
 				TargetAttributes = {
 					002A3D9E1B795761006C478D = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 923CWAH3CT;
+						DevelopmentTeam = Y5D3EVK3SE;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;

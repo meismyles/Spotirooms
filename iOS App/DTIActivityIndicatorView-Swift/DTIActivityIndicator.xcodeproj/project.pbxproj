@@ -194,6 +194,7 @@
 		25FC0C6B1A04318500F61053 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = dtissera;
 				TargetAttributes = {
